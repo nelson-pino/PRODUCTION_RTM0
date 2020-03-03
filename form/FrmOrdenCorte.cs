@@ -1,4 +1,5 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using Microsoft.Office.Interop.Excel;
 using RitramaAPP.Clases;
 using RitramaAPP.form;
@@ -1329,8 +1330,25 @@ namespace RitramaAPP
             using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
             {
                 ReportDocument reporte = new ReportDocument();
+                TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
+                TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
                 reporte.Load(R.PATH_FILES.PATH_DATA_REPORT_ORDEN_CORTE);
                 reporte.SetParameterValue("number_oc", txt_numero_oc.Text.Trim());
+                Tables CrTables;
+                CrTables = reporte.Database.Tables;
+                ConnectionInfo ConexInfo = new ConnectionInfo
+                {
+                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    DatabaseName = R.DATABASES.RITRAMA,
+                    UserID = R.USERS.UserMaster,
+                    Password = R.USERS.KeyMaster
+                };
+                foreach (Table table in CrTables)
+                {
+                    crtablelogoninfo = table.LogOnInfo;
+                    crtablelogoninfo.ConnectionInfo = ConexInfo;
+                    table.ApplyLogOnInfo(crtablelogoninfo);
+                }
                 frmReportView.crystalReportViewer1.ReportSource = reporte;
                 frmReportView.crystalReportViewer1.Zoom(150);
                 frmReportView.Text = "Reporte de la Orden de Corte";

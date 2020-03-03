@@ -1,4 +1,5 @@
 ﻿using CrystalDecisions.CrystalReports.Engine;
+using CrystalDecisions.Shared;
 using RitramaAPP.Clases;
 using System;
 using System.Collections.Generic;
@@ -578,14 +579,40 @@ namespace RitramaAPP.form
             {
                 using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
                 {
+                    
                     ReportDocument reporte = new ReportDocument();
-                    reporte.Load(R.PATH_FILES.PATH_REPORTS_DETALLE_RC);
+                    TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
+                    TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
+
+                    reporte.Load(Application.StartupPath + R.PATH_FILES.PATH_REPORTS_DETALLE_RC);
                     reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
+
+                    Tables CrTables;
+                    CrTables = reporte.Database.Tables;
+
+                    ConnectionInfo ConexInfo = new ConnectionInfo
+                    {
+                        ServerName = R.SERVERS.SERVER_RITRAMA,
+                        DatabaseName = R.DATABASES.RITRAMA,
+                        UserID = R.USERS.UserMaster,
+                        Password = R.USERS.KeyMaster
+                    };
+
+                    foreach (Table table in CrTables)
+                    {
+                        crtablelogoninfo = table.LogOnInfo;
+                        crtablelogoninfo.ConnectionInfo = ConexInfo;
+                        table.ApplyLogOnInfo(crtablelogoninfo);
+                    }
+                    
+                   
                     frmReportView.crystalReportViewer1.ReportSource = reporte;
+                    frmReportView.Refresh();
                     frmReportView.crystalReportViewer1.Zoom(80);
                     frmReportView.Text = "Detalle de los Unique Code (RC)";
-                    frmReportView.Width = 920;
-                    frmReportView.Height = 820;
+                    frmReportView.Width = 900;
+                    frmReportView.Height = 700;
+                    frmReportView.Refresh();
                     frmReportView.ShowDialog();
                 }
             }
@@ -595,8 +622,30 @@ namespace RitramaAPP.form
                 using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
                 {
                     ReportDocument reporte = new ReportDocument();
-                    reporte.Load(R.PATH_FILES.PATH_REPORTS_FORMAT_CONDUCE_SP);
+                    TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
+                    TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
+
+                    reporte.Load(Application.StartupPath + R.PATH_FILES.PATH_REPORTS_FORMAT_CONDUCE_SP);
                     reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
+                    
+                    Tables CrTables;
+                    CrTables = reporte.Database.Tables;
+
+                    ConnectionInfo ConexInfo = new ConnectionInfo
+                    {
+                        ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                        DatabaseName = R.DATABASES.RITRAMA,
+                        UserID = R.USERS.UserMaster,
+                        Password = R.USERS.KeyMaster
+                    };
+
+                    foreach (Table table in CrTables)
+                    {
+                        crtablelogoninfo = table.LogOnInfo;
+                        crtablelogoninfo.ConnectionInfo = ConexInfo;
+                        table.ApplyLogOnInfo(crtablelogoninfo);
+                    }
+
                     frmReportView.crystalReportViewer1.ReportSource = reporte;
                     frmReportView.crystalReportViewer1.Zoom(150);
                     frmReportView.Text = "(Formato de Conduce Ritrama Sin precio)";
@@ -612,13 +661,40 @@ namespace RitramaAPP.form
                 using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
                 {
                     ReportDocument reporte = new ReportDocument();
-                    reporte.Load(R.PATH_FILES.PATH_REPORTS_FORMAT_CONDUCE);
+                    TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
+                    TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
+
+                    reporte.Load(Application.StartupPath +  R.PATH_FILES.PATH_REPORTS_FORMAT_CONDUCE);
                     reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
+
+                    ConnectionInfo ConexInfo = new ConnectionInfo
+                    {
+                        ServerName = R.SERVERS.SERVER_RITRAMA,
+                        DatabaseName = R.DATABASES.RITRAMA,
+                        UserID = R.USERS.UserMaster,
+                        Password = R.USERS.KeyMaster
+
+                    };
+                    
+
+                    Tables CrTables;
+                    CrTables = reporte.Database.Tables;
+
+                    
+                    foreach (Table table in CrTables)
+                    {
+                        crtablelogoninfo = table.LogOnInfo;
+                        
+                        crtablelogoninfo.ConnectionInfo = ConexInfo;
+                        table.ApplyLogOnInfo(crtablelogoninfo);
+                    }
+
                     frmReportView.crystalReportViewer1.ReportSource = reporte;
-                    frmReportView.crystalReportViewer1.Zoom(150);
+                    frmReportView.crystalReportViewer1.Zoom(140);
                     frmReportView.Text = "Formato de Conduce Ritrama";
-                    frmReportView.Width = 920;
-                    frmReportView.Height = 820;
+                    frmReportView.Width = 900;
+                    frmReportView.Height = 700;
+                    frmReportView.Refresh();
                     frmReportView.ShowDialog();
                 }
             }

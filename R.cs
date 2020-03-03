@@ -4,8 +4,24 @@ namespace RitramaAPP
 {
     public class R
     {
+        public class SERVERS
+        {
+            public static string SERVER_ETIQUETAS = "SERVER-ETIQUETA";
+            public static string SERVER_RITRAMA = "RITRAMASRV01";
+        }
+        public class DATABASES 
+        {
+            public static string RITRAMA = "RITRAMA";
+        }
+        public class USERS
+        {
+            public static string UserMaster = "Npino";
+            public static string KeyMaster = "Jossycar5%";
+        }
+
         public class SQL
         {
+            
             public class DATABASE
             {
                 public static string NAME = "ritrama";
@@ -237,6 +253,11 @@ namespace RitramaAPP
         }
         public class ERROR_MESSAGES
         {
+            public class ERROR_SQL 
+            {
+                public static string ERROR_MESSAGE_SQLCONNECT= "Error al conectarse a la base de datos del sistema.";
+                public static string ERROR_MESSAGE_SQLDISCONNECT = "Error al desconectarse de la base de datos del sistema.";
+            }
             public class INVENTARIO
             {
                 public static string MESSAGE_INSERT_INICIALES_ERROR = "Error al tratar de grabar la data de los iniciales.";
@@ -316,15 +337,16 @@ namespace RitramaAPP
         }
         public class PATH_FILES
         {
-            public static string FILE_TXT_MATERIA_PRIMA = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\data\recepciones.txt";
-            public static string FILE_TXT_DATA_ETIQUETA = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\data\data.txt";
-            public static string FILE_TXT_DATA_PICKING_DESPACHO = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\data\picking.txt";
-            public static string FILE_TXT_DATA_CANT_INICIALES = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\data\iniciales.txt";
-            public static string PATH_REPORTS_FORMAT_CONDUCE = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\Reports\Format_Despacho.rpt";
-            public static string PATH_REPORTS_DETALLE_RC = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\Reports\detalle_RC.rpt";
-            public static string PATH_REPORTS_FORMAT_CONDUCE_SP = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\Reports\Format_Despacho_sinprecio.rpt";
-            public static string PATH_DATA_IMPORT_EXCEL_RECEPCIONES = @"C:\Users\npino\Desktop\ritrama\";
-            public static string PATH_DATA_REPORT_ORDEN_CORTE = @"C:\Users\npino\Documents\RITRAMA\RitramaAPP\Reports\orden_corte.rpt";
+            public static string FILE_TXT_MATERIA_PRIMA = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\recepciones.txt";
+            public static string FILE_TXT_DATA_ETIQUETA = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\data.txt";
+            public static string FILE_TXT_DATA_PICKING_DESPACHO = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\picking.txt";
+            public static string FILE_TXT_DATA_CANT_INICIALES = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\iniciales.txt";
+            public static string PATH_DATA_REPORT_ORDEN_CORTE = @"~\orden_corte.rpt";
+            public static string PATH_DATA_IMPORT_EXCEL_RECEPCIONES = @"\Users\npino\Desktop\ritrama\";
+            public static string PATH_REPORTS_FORMAT_CONDUCE = @"\Reports\Format_Despacho.rpt";
+            public static string PATH_REPORTS_DETALLE_RC = @"\Reports\detalle_RC.rpt";
+            public static string PATH_REPORTS_FORMAT_CONDUCE_SP = @"\Reports\Format_Despacho_sinprecio.rpt";
+
         }
         public class CONSTANTES
         {

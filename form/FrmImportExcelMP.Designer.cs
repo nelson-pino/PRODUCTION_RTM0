@@ -119,7 +119,7 @@
             this.bot_borrar_data.Text = "Limpiar Pantalla";
             this.bot_borrar_data.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.bot_borrar_data.UseVisualStyleBackColor = true;
-            this.bot_borrar_data.Click += new System.EventHandler(this.bot_borrar_data_Click);
+            this.bot_borrar_data.Click += new System.EventHandler(this.Bot_borrar_data_Click);
             // 
             // TXT_NOMBRE_HOJA
             // 
@@ -263,7 +263,7 @@
             this.BOT_DEBUG_DATA.Text = "Depurar Data";
             this.BOT_DEBUG_DATA.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.BOT_DEBUG_DATA.UseVisualStyleBackColor = true;
-            this.BOT_DEBUG_DATA.Click += new System.EventHandler(this.bot_convertir_Click);
+            this.BOT_DEBUG_DATA.Click += new System.EventHandler(this.Bot_convertir_Click);
             // 
             // BOT_SEND_DATA
             // 
@@ -375,7 +375,7 @@
             this.bot_buscar.Text = "Buscar";
             this.bot_buscar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.bot_buscar.UseVisualStyleBackColor = true;
-            this.bot_buscar.Click += new System.EventHandler(this.bot_buscar_Click);
+            this.bot_buscar.Click += new System.EventHandler(this.Bot_buscar_Click);
             // 
             // FrmImportExcelMP
             // 

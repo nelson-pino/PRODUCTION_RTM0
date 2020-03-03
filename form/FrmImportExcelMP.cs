@@ -34,20 +34,21 @@ namespace RitramaAPP.form
         }
         private void Bot_import_data_Click(object sender, EventArgs e)
         {
-            openFileDialog1 = new OpenFileDialog();  //crea un Objeto openfileDialog. 
-            openFileDialog1.Filter = "XML Files (*.xml; *.xls; *.xlsx; *.xlsm; *.xlsb) |*.xml; *.xls; *.xlsx; *.xlsm; *.xlsb";//open file format define Excel Files(.xls)|*.xls| Excel Files(.xlsx)|*.xlsx| 
-            openFileDialog1.FilterIndex = 3;
-            openFileDialog1.Multiselect = false;        // no permite seleccionar multiples archivos
-            openFileDialog1.Title = "Seleccione la hoja de excel a Exportar";   // define el nombre de la ventana
-            openFileDialog1.InitialDirectory = @"Desktop"; // define el directorio inicial
+            openFileDialog1 = new OpenFileDialog
+            {
+                Filter = "XML Files (*.xml; *.xls; *.xlsx; *.xlsm; *.xlsb) |*.xml; *.xls; *.xlsx; *.xlsm; *.xlsb",//open file format define Excel Files(.xls)|*.xls| Excel Files(.xlsx)|*.xlsx| 
+                FilterIndex = 3,
+                Multiselect = false,        // no permite seleccionar multiples archivos
+                Title = "Seleccione la hoja de excel a Exportar",   // define el nombre de la ventana
+                InitialDirectory = @"Desktop" // define el directorio inicial
+            };  //crea un Objeto openfileDialog. 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)        //executing when file open
             {
                 string pathName = openFileDialog1.FileName;
                 fileName = System.IO.Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
                 tbContainer = new System.Data.DataTable();
                 strConn = string.Empty;
-                string sheetName = fileName;
-
+                //string sheetName = fileName;
                 FileInfo file = new FileInfo(pathName);
                 if (!file.Exists) { throw new Exception("Error, file doesn't exists!"); }
                 string extension = file.Extension;
@@ -124,9 +125,9 @@ namespace RitramaAPP.form
                 TXT_ROWS.Text = (tbContainer.Rows.Count).ToString();
                 // si la busqueda es por rollo cortado
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error!"+ex);
+                MessageBox.Show("Error!");
             }
         }
         private void BOT_LOAD_DATA_Click(object sender, EventArgs e)
@@ -136,98 +137,51 @@ namespace RitramaAPP.form
         private void LOADATA_MASTERS()
         {
 
-            GRID_IMPORT.Columns[0].HeaderText = "Factura";
-            GRID_IMPORT.Columns[1].HeaderText = "Fecha Llegada";
-            GRID_IMPORT.Columns[2].HeaderText = "Codigo";
-            GRID_IMPORT.Columns[3].HeaderText = "Descripcion";
-            GRID_IMPORT.Columns[4].HeaderText = "ROLL ID";
-            GRID_IMPORT.Columns[5].HeaderText = "Fecha Produccion";
-            GRID_IMPORT.Columns[6].HeaderText = "# Rollo";
-            GRID_IMPORT.Columns[7].HeaderText = "Ancho mm & Pulg.";
-            GRID_IMPORT.Columns[8].HeaderText = "ML & Pies Lineales";
-            GRID_IMPORT.Columns[9].HeaderText = "# Empalmes";
-            GRID_IMPORT.Columns[10].HeaderText = "Inventario";
-            GRID_IMPORT.Columns[11].HeaderText = "Fecha Salida";
-            GRID_IMPORT.Columns[12].HeaderText = "Doc. Salida OC";
-            GRID_IMPORT.Columns[13].HeaderText = "Notas";
-            GRID_IMPORT.Columns[14].HeaderText = "Kilo Neto";
-            GRID_IMPORT.Columns[15].HeaderText = "Kilo Bruto";
-            GRID_IMPORT.Columns[16].HeaderText = "Almacen";
-            GRID_IMPORT.Columns[17].HeaderText = "Fila";
-            GRID_IMPORT.Columns[18].HeaderText = "Visto";
-            GRID_IMPORT.Columns[19].HeaderText = "M2";
-            GRID_IMPORT.Columns[20].HeaderText = "Count";
+            GRID_IMPORT.Columns[0].HeaderText = "Codigo Producto";
+            GRID_IMPORT.Columns[1].HeaderText = "Nombre del Producto";
+            GRID_IMPORT.Columns[2].HeaderText = "Roll-ID";
+            GRID_IMPORT.Columns[3].HeaderText = "Ancho [MM/PULGADAS]";
+            GRID_IMPORT.Columns[4].HeaderText = "Largo [MTS./PIES]";
+            GRID_IMPORT.Columns[5].HeaderText = "# Empalme";
+            GRID_IMPORT.Columns[6].HeaderText = "Fecha Llegada";
+            GRID_IMPORT.Columns[7].HeaderText = "Factura";
         }
         private void LOADATA_CORTADOS()
         {
-            GRID_IMPORT.Columns["F1"].HeaderText = "Fecha OC.";
-            GRID_IMPORT.Columns["F2"].HeaderText = "OC.";
-            GRID_IMPORT.Columns["F3"].HeaderText = "# Rollo.";
-            GRID_IMPORT.Columns["F4"].HeaderText = "Codigo";
-            GRID_IMPORT.Columns["F5"].HeaderText = "Nombre del Producto";
-            GRID_IMPORT.Columns["F6"].HeaderText = "Roll. ID";
-            GRID_IMPORT.Columns["F7"].HeaderText = "Ancho [Pulg.]";
-            GRID_IMPORT.Columns["F8"].HeaderText = "Largo [Pies]";
-            GRID_IMPORT.Columns["F9"].HeaderText = "Msi.";
-            GRID_IMPORT.Columns["F10"].HeaderText = "# Empalmes";
-            GRID_IMPORT.Columns["F11"].HeaderText = "Code Perso.";
-            GRID_IMPORT.Columns["F12"].HeaderText = "Codigo Unico";
-            GRID_IMPORT.Columns["F13"].HeaderText = "Ratio Kilos";
-            GRID_IMPORT.Columns["F14"].HeaderText = "Seccion";
-            GRID_IMPORT.Columns["F15"].HeaderText = "Rack";
-            GRID_IMPORT.Columns["F16"].HeaderText = "Inventario";
-            GRID_IMPORT.Columns["F17"].HeaderText = "Fecha Salida";
-            GRID_IMPORT.Columns["F18"].HeaderText = "Doc. Salida";
-            GRID_IMPORT.Columns["F19"].HeaderText = "Cliente";
-            GRID_IMPORT.Columns["F20"].HeaderText = "Comentario";
+            GRID_IMPORT.Columns["F1"].HeaderText = "Codigo Producto";
+            GRID_IMPORT.Columns["F2"].HeaderText = "Nombre del Producto";
+            GRID_IMPORT.Columns["F3"].HeaderText = "Roll-ID";
+            GRID_IMPORT.Columns["F4"].HeaderText = "Ancho [Pulgs]";
+            GRID_IMPORT.Columns["F5"].HeaderText = "Width [Pies]";
+            GRID_IMPORT.Columns["F6"].HeaderText = "MSI";
+            GRID_IMPORT.Columns["F7"].HeaderText = "Codigo unico";
+            GRID_IMPORT.Columns["F8"].HeaderText = "# Empalme";
+            GRID_IMPORT.Columns["F9"].HeaderText = "Codigo Perso.";
+            GRID_IMPORT.Columns["F10"].HeaderText = "Fecha";
+            GRID_IMPORT.Columns["F11"].HeaderText = "Document";
         }
         private void LOADATA_HOJAS()
         {
-            GRID_IMPORT.Columns["F1"].HeaderText = "Num. Compra";
-            GRID_IMPORT.Columns["F2"].HeaderText = "Fecha";
-            GRID_IMPORT.Columns["F3"].HeaderText = "Id. Product.";
-            GRID_IMPORT.Columns["F4"].HeaderText = "Nombre Producto";
-            GRID_IMPORT.Columns["F5"].HeaderText = "Id Hojas";
-            GRID_IMPORT.Columns["F6"].HeaderText = "Resmas x Paq.";
-            GRID_IMPORT.Columns["F7"].HeaderText = "Ancho MM";
-            GRID_IMPORT.Columns["F8"].HeaderText = "Largo MM";
-            GRID_IMPORT.Columns["F9"].HeaderText = "M2";
-            GRID_IMPORT.Columns["F10"].HeaderText = "Cantidad Hojas";
-            GRID_IMPORT.Columns["F11"].HeaderText = "Kilos";
-            GRID_IMPORT.Columns["F12"].HeaderText = "Kilos x Hojas";
-            GRID_IMPORT.Columns["F13"].HeaderText = "Paleta";
-            GRID_IMPORT.Columns["F14"].HeaderText = "Inventario";
-            GRID_IMPORT.Columns["F15"].HeaderText = "Fecha de Salida";
-            GRID_IMPORT.Columns["F16"].HeaderText = "Documento Salida";
-            GRID_IMPORT.Columns["F17"].HeaderText = "Factura";
-            GRID_IMPORT.Columns["F18"].HeaderText = "Cliente";
-            GRID_IMPORT.Columns["F19"].HeaderText = "Territorio";
-            GRID_IMPORT.Columns["F20"].HeaderText = "Almacen";
-            GRID_IMPORT.Columns["F21"].HeaderText = "Fila";
+            GRID_IMPORT.Columns["F1"].HeaderText = "Codigo Producto";
+            GRID_IMPORT.Columns["F2"].HeaderText = "Nombre del Producto";
+            GRID_IMPORT.Columns["F3"].HeaderText = "ID-HOJA";
+            GRID_IMPORT.Columns["F4"].HeaderText = "Resma/Paq.";
+            GRID_IMPORT.Columns["F5"].HeaderText = "Ancho [mm]";
+            GRID_IMPORT.Columns["F6"].HeaderText = "Largo [mm]";
+            GRID_IMPORT.Columns["F7"].HeaderText = "Cantidad Hojas";
+            GRID_IMPORT.Columns["F8"].HeaderText = "Fecha Llegada";
+            GRID_IMPORT.Columns["F9"].HeaderText = "Factura";
         }
         private void LOADATA_GRAPHICS()
         {
-            GRID_IMPORT.Columns["F1"].HeaderText = "Recepcion.";
-            GRID_IMPORT.Columns["F2"].HeaderText = "Fecha Llegada.";
-            GRID_IMPORT.Columns["F3"].HeaderText = "Codigo Producto";
-            GRID_IMPORT.Columns["F4"].HeaderText = "Nombre del Producto";
-            GRID_IMPORT.Columns["F5"].HeaderText = "Roll Id.";
-            GRID_IMPORT.Columns["F6"].HeaderText = "Roll #";
-            GRID_IMPORT.Columns["F7"].HeaderText = "Ancho MM";
-            GRID_IMPORT.Columns["F8"].HeaderText = "Mts.";
-            GRID_IMPORT.Columns["F9"].HeaderText = "M2";
-            GRID_IMPORT.Columns["F10"].HeaderText = "Kilos";
-            GRID_IMPORT.Columns["F11"].HeaderText = "Paleta";
-            GRID_IMPORT.Columns["F12"].HeaderText = "Almacen";
-            GRID_IMPORT.Columns["F13"].HeaderText = "Fila";
-            GRID_IMPORT.Columns["F14"].HeaderText = "Fecha Salida";
-            GRID_IMPORT.Columns["F15"].HeaderText = "Documento Salida";
-            GRID_IMPORT.Columns["F16"].HeaderText = "Factura";
-            GRID_IMPORT.Columns["F17"].HeaderText = "Inventario";
-            GRID_IMPORT.Columns["F18"].HeaderText = "Cliente";
-            GRID_IMPORT.Columns["F19"].HeaderText = "Territorio";
-            GRID_IMPORT.Columns["F20"].HeaderText = "Nota";
-            GRID_IMPORT.Columns["F21"].HeaderText = "Cuenta";
+            GRID_IMPORT.Columns["F1"].HeaderText = "Codigo Producto.";
+            GRID_IMPORT.Columns["F2"].HeaderText = "Nombre del Producto";
+            GRID_IMPORT.Columns["F3"].HeaderText = "Roll-ID.";
+            GRID_IMPORT.Columns["F4"].HeaderText = "Ancho [mm].";
+            GRID_IMPORT.Columns["F5"].HeaderText = "Lenght [mts].";
+            GRID_IMPORT.Columns["F6"].HeaderText = "M2.";
+            GRID_IMPORT.Columns["F7"].HeaderText = "Fecha Llegada.";
+            GRID_IMPORT.Columns["F8"].HeaderText = "Factura.";
         }
         private void LOADATA_PACKING()
         {
@@ -262,42 +216,57 @@ namespace RitramaAPP.form
         private void DEBUG_MASTERS()
         {
             double numero = 0;
-            string cadena = "";
-            string numerostr = "";
+            string cadena;
+            string numerostr;
+
+            string ColNameWidth = "F4";
+            string ColNameLenght = "F5";
+            string ColNameSplice = "F6";
+
+            
             foreach (DataRow row in tbContainer.Rows)
             {
                 //Columna de Ancho.
-                cadena = Convert.ToString(row["F8"]);
+                cadena = Convert.ToString(row[ColNameWidth]);
                 numerostr = "";
+                
                 foreach (char str in cadena)
                 {
                     if (!char.IsLetter(str))
                         numerostr += str.ToString();
                 }
-                if (Convert.ToString(row["F8"]).Contains("mm"))
+                if (Convert.ToString(row[ColNameWidth]).Contains("mm"))
                 {
                     numero = Math.Round(double.Parse(numerostr,
                          CultureInfo.InvariantCulture)
                         * R.CONSTANTES.FACTOR_MM_PULGADAS, 4,
                         MidpointRounding.AwayFromZero);
                 }
-                else
+                else if (Convert.ToString(row[ColNameWidth]).Contains("mts")) 
+                {
+                    numero = Math.Round(double.Parse(numerostr,
+                         CultureInfo.InvariantCulture)
+                        * R.CONSTANTES.FACTOR_METROS_PULDADAS, 4,
+                        MidpointRounding.AwayFromZero);
+
+                }
+                else if (Convert.ToString(row[ColNameWidth]).Contains("pulg"))
                 {
                     numero = double.Parse(numerostr,
                          CultureInfo.InvariantCulture);
                 }
-                row["F8"] = Convert.ToString(numero);
-                GRID_IMPORT.Columns[7].HeaderText = "Ancho [PULGADAS]";
+                row[ColNameWidth] = Convert.ToString(numero);
+                GRID_IMPORT.Columns[3].HeaderText = "Ancho [PULGADAS]";
 
                 //Columna de Largo.
-                cadena = Convert.ToString(row["F9"]);
+                cadena = Convert.ToString(row[ColNameLenght]);
                 numerostr = "";
                 foreach (char str in cadena)
                 {
                     if (!char.IsLetter(str))
                         numerostr += str.ToString();
                 }
-                if (Convert.ToString(row["F9"]).Contains("Mts"))
+                if (Convert.ToString(row[ColNameLenght]).Contains("mts"))
                 {
 
                     numero = Math.Round(double.Parse(numerostr,
@@ -310,13 +279,13 @@ namespace RitramaAPP.form
                     numero = double.Parse(numerostr,
                          CultureInfo.InvariantCulture);
                 }
-                row["F9"] = Convert.ToString(numero);
-                GRID_IMPORT.Columns[8].HeaderText = "Largo [PIES]";
+                row[ColNameLenght] = Convert.ToString(numero);
+                GRID_IMPORT.Columns[4].HeaderText = "Largo [PIES]";
 
                 //Columna splice.
-                if (Convert.ToString(row["F10"]) == "")
+                if (Convert.ToString(row[ColNameSplice]) == "")
                 {
-                    row["F10"] = 0;
+                    row[ColNameSplice] = 0;
                 }
             }
             tbContainer.AcceptChanges();
@@ -341,23 +310,23 @@ namespace RitramaAPP.form
                     Fecha_produccion = DateTime.Today,
                     Fecha_reg = DateTime.Today,
                     Hora_reg = DateTime.Now.ToShortTimeString(),
-                    Roll_ID = Convert.ToString(row.Cells["F5"].Value),
+                    Roll_ID = Convert.ToString(row.Cells["F3"].Value),
                     Supply_Id = "999",
-                    Part_Number = Convert.ToString(row.Cells["F3"].Value),
+                    Part_Number = Convert.ToString(row.Cells["F1"].Value),
                     Master = true,
                     Resma = false,
                     Graphics = false,
                     Palet_number = "0",
                     Palet_cant = 0,
                     Palet_paginas = 0,
-                    Width = double.Parse(Convert.ToString(row.Cells["F8"].Value),
+                    Width = double.Parse(Convert.ToString(row.Cells["F4"].Value),
                     System.Globalization.NumberStyles.AllowDecimalPoint),
-                    Lenght = Convert.ToDouble(row.Cells["F9"].Value),
-                    Width_metros = Convert.ToDouble(row.Cells["F8"].Value) *
+                    Lenght = Convert.ToDouble(row.Cells["F5"].Value),
+                    Width_metros = Convert.ToDouble(row.Cells["F4"].Value) *
                     R.CONSTANTES.FACTOR_PULGADAS_METROS,
-                    Lenght_metros = Convert.ToDouble(row.Cells["F9"].Value) *
+                    Lenght_metros = Convert.ToDouble(row.Cells["F5"].Value) *
                     R.CONSTANTES.FACTOR_PIES_METROS,
-                    Splice = Convert.ToInt16(row.Cells["F10"].Value),
+                    Splice = Convert.ToInt16(row.Cells["F6"].Value),
                     Core = 0,
                     Ubicacion = "",
                     Anulado = false,
@@ -380,7 +349,7 @@ namespace RitramaAPP.form
                 Numero = OrdenCorte.ToString(),
                 Fecha = DateTime.Today,
                 Fecha_produccion = DateTime.Today,
-                Product_id = Convert.ToString(GRID_IMPORT.Rows[0].Cells["F4"].Value),
+                Product_id = Convert.ToString(GRID_IMPORT.Rows[0].Cells["F1"].Value),
                 Rollid_1 = "1",
                 Rollid_2 = "2",
                 Width_1 = 0,
@@ -402,12 +371,14 @@ namespace RitramaAPP.form
             };
             ocorte.rollos = new List<Roll_Details>();
             ocorte.Cortes = new List<Corte>();
-            Corte c = new Corte();
-            c.Num = 0;
-            c.Msi = 0;
-            c.Width = 0;
-            c.Lenght = 0;
-            c.Orden = Convert.ToString(OrdenCorte);
+            Corte c = new Corte
+            {
+                Num = 0,
+                Msi = 0,
+                Width = 0,
+                Lenght = 0,
+                Orden = Convert.ToString(OrdenCorte)
+            };
             ocorte.Cortes.Add(c);
             int fil = 1;
             foreach (DataGridViewRow row in GRID_IMPORT.Rows)
@@ -416,16 +387,16 @@ namespace RitramaAPP.form
                 {
                     Fecha = DateTime.Today,
                     Numero_Orden = Convert.ToString(OrdenCorte),
-                    Product_id = Convert.ToString(row.Cells["F4"].Value) + "0",
-                    Product_name = Convert.ToString(GRID_IMPORT.Rows[fil - 1].Cells["F5"].Value),
+                    Product_id = Convert.ToString(row.Cells["F1"].Value) + "0",
+                    Product_name = Convert.ToString(GRID_IMPORT.Rows[fil - 1].Cells["F2"].Value),
                     Roll_number = Convert.ToString(fil),
-                    Code_Person = Convert.ToString(row.Cells["F11"].Value),
-                    Unique_code = Convert.ToString(row.Cells["F12"].Value),
-                    Width = Convert.ToDecimal(row.Cells["F7"].Value),
-                    Large = Convert.ToDecimal(row.Cells["F8"].Value),
-                    Msi = Convert.ToDecimal(row.Cells["F9"].Value),
-                    Roll_id = Convert.ToString(row.Cells["F6"].Value),
-                    Splice = Convert.ToInt16(row.Cells["F10"].Value),
+                    Code_Person = Convert.ToString(row.Cells["F9"].Value),
+                    Unique_code = Convert.ToString(row.Cells["F7"].Value),
+                    Width = Convert.ToDecimal(row.Cells["F4"].Value),
+                    Large = Convert.ToDecimal(row.Cells["F5"].Value),
+                    Msi = Convert.ToDecimal(row.Cells["F6"].Value),
+                    Roll_id = Convert.ToString(row.Cells["F3"].Value),
+                    Splice = Convert.ToInt16(row.Cells["F8"].Value),
                     Status = "Ok",
                     Disponible = true
                 };
@@ -454,19 +425,19 @@ namespace RitramaAPP.form
                     Fecha_produccion = DateTime.Today,
                     Fecha_reg = DateTime.Today,
                     Hora_reg = DateTime.Now.ToShortTimeString(),
-                    Roll_ID = Convert.ToString(row.Cells["F5"].Value),
+                    Roll_ID = Convert.ToString(row.Cells["F3"].Value),
                     Supply_Id = "999",
                     SupplyName = "",
-                    Part_Number = Convert.ToString(row.Cells["F3"].Value),
-                    ProductName = Convert.ToString(row.Cells["F4"].Value),
+                    Part_Number = Convert.ToString(row.Cells["F1"].Value),
+                    ProductName = Convert.ToString(row.Cells["F2"].Value),
                     Master = false,
                     Resma = true,
                     Graphics = false,
-                    Palet_number = Convert.ToString(row.Cells["F13"].Value),
-                    Palet_cant = Convert.ToDecimal(row.Cells["F6"].Value),
-                    Palet_paginas = Int32.Parse(Convert.ToString(row.Cells["F10"].Value), System.Globalization.NumberStyles.Any),
-                    Width = Convert.ToDouble(row.Cells["F8"].Value),
-                    Lenght = Convert.ToDouble(row.Cells["F9"].Value),
+                    Palet_number = Convert.ToString(row.Cells["F9"].Value).Substring(0, 9),
+                    Palet_cant = Convert.ToDecimal(row.Cells["F4"].Value),
+                    Palet_paginas = Int32.Parse(Convert.ToString(row.Cells["F7"].Value), System.Globalization.NumberStyles.Any),
+                    Width = Convert.ToDouble(row.Cells["F5"].Value),
+                    Lenght = Convert.ToDouble(row.Cells["F6"].Value),
                     Width_metros = 0,
                     Lenght_metros = 0,
                     Splice = 0,
@@ -498,24 +469,26 @@ namespace RitramaAPP.form
                 ClassRecepcion data = new ClassRecepcion
                 {
                     Orden = ord.ToString(),
-                    Embarque = Convert.ToString(row.Cells["F1"].Value),
-                    Fecha_recepcion = DateTime.Today,
+                    Embarque = "grainic",
+                    Fecha_recepcion = DBNull.Value.Equals(row.Cells["F7"].Value) ? 
+                    DateTime.Today : Convert.ToDateTime(row.Cells["F7"].Value),
                     Fecha_produccion = DateTime.Today,
                     Fecha_reg = DateTime.Today,
                     Hora_reg = DateTime.Now.ToShortTimeString(),
-                    Roll_ID = Convert.ToString(row.Cells["F5"].Value),
+                    Roll_ID = Convert.ToString(row.Cells["F3"].Value),
                     Supply_Id = "999",
                     SupplyName = "",
-                    Part_Number = Convert.ToString(row.Cells["F3"].Value),
+                    Part_Number = Convert.ToString(row.Cells["F1"].Value),
                     ProductName = "",
                     Master = false,
                     Resma = false,
                     Graphics = true,
-                    Palet_number = Convert.ToString(row.Cells["F11"].Value),
+                    Palet_number = Convert.ToString(row.Cells["F8"].Value).Length>10 ? 
+                    Convert.ToString(row.Cells["F8"].Value).Substring(0,9):Convert.ToString(row.Cells["F8"].Value),
                     Palet_cant = 1,
                     Palet_paginas = 1,
-                    Width = Convert.ToDouble(row.Cells["F7"].Value),
-                    Lenght = Convert.ToDouble(row.Cells["F9"].Value),
+                    Width = Convert.ToDouble(row.Cells["F4"].Value),
+                    Lenght = Convert.ToDouble(row.Cells["F5"].Value),
                     Width_metros = 0,
                     Lenght_metros = 0,
                     Splice = 0,
@@ -692,11 +665,11 @@ namespace RitramaAPP.form
         {
 
         }
-        private void bot_borrar_data_Click(object sender, EventArgs e)
+        private void Bot_borrar_data_Click(object sender, EventArgs e)
         {
             GRID_IMPORT.DataSource = "";
         }
-        private void bot_convertir_Click(object sender, EventArgs e)
+        private void Bot_convertir_Click(object sender, EventArgs e)
         {
             if (RA_MASTERS.Checked)
             {
@@ -758,7 +731,7 @@ namespace RitramaAPP.form
                 RA_GRAPHICS.Font = new Font("Tahoma", 8.25F, FontStyle.Regular);
             }
         }
-        private void bot_buscar_Click(object sender, EventArgs e)
+        private void Bot_buscar_Click(object sender, EventArgs e)
         {
             SearchData();
         }
@@ -770,7 +743,7 @@ namespace RitramaAPP.form
                 ROWS_FOUND.Text = " 0 encontrados.";
             }
         }
-        private Boolean VALIDAR_NUMERO_CONSECUTIVO()
+        public Boolean VALIDAR_NUMERO_CONSECUTIVO()
         {
             if (TXT_NUMDOC.Text.Length == 0)
             {

@@ -49,7 +49,6 @@
             this.Controls.Add(this.crystalReportViewer1);
             this.Name = "FrmReportViewCrystal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Load += new System.EventHandler(this.FrmReportViewCrystal_Load_1);
             this.ResumeLayout(false);
 
         }
