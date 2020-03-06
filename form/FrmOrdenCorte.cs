@@ -1332,13 +1332,13 @@ namespace RitramaAPP
                 ReportDocument reporte = new ReportDocument();
                 TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
                 TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
-                reporte.Load(R.PATH_FILES.PATH_DATA_REPORT_ORDEN_CORTE);
+                reporte.Load(System.Windows.Forms.Application.StartupPath + R.PATH_FILES.PATH_DATA_REPORT_ORDEN_CORTE);
                 reporte.SetParameterValue("number_oc", txt_numero_oc.Text.Trim());
                 Tables CrTables;
                 CrTables = reporte.Database.Tables;
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster
@@ -1350,10 +1350,10 @@ namespace RitramaAPP
                     table.ApplyLogOnInfo(crtablelogoninfo);
                 }
                 frmReportView.crystalReportViewer1.ReportSource = reporte;
-                frmReportView.crystalReportViewer1.Zoom(150);
+                frmReportView.crystalReportViewer1.Zoom(100);
                 frmReportView.Text = "Reporte de la Orden de Corte";
-                frmReportView.Width = 920;
-                frmReportView.Height = 820;
+                frmReportView.Width = 900;
+                frmReportView.Height = 700;
                 frmReportView.ShowDialog();
             }
         }
