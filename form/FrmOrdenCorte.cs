@@ -669,7 +669,9 @@ namespace RitramaAPP
         {
             string separator = ",";
 
-            using (StreamWriter sr = new StreamWriter(R.PATH_FILES.FILE_TXT_DATA_ETIQUETA))
+            using (StreamWriter sr = 
+                new StreamWriter(System.Windows.Forms.Application.StartupPath + 
+                R.PATH_FILES.FILE_TXT_DATA_ETIQUETA))
             {
                 foreach (DataGridViewRow row in grid_rollos.Rows)
                 {

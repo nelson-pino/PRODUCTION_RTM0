@@ -338,7 +338,7 @@ namespace RitramaAPP
         public class PATH_FILES
         {
             public static string FILE_TXT_MATERIA_PRIMA = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\recepciones.txt";
-            public static string FILE_TXT_DATA_ETIQUETA = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\data.txt";
+            public static string FILE_TXT_DATA_ETIQUETA = @"\Etiquetas\data_orden_corte.txt";
             public static string FILE_TXT_DATA_PICKING_DESPACHO = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\picking.txt";
             public static string FILE_TXT_DATA_CANT_INICIALES = @"\Users\npino\Documents\RITRAMA\RitramaAPP\data\iniciales.txt";
             public static string PATH_DATA_REPORT_ORDEN_CORTE = @"\Reports\Formato_OrdenCorte.rpt";

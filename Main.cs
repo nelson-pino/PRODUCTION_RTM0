@@ -1,4 +1,5 @@
 ﻿using RitramaAPP.form;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace RitramaAPP
@@ -87,6 +88,12 @@ namespace RitramaAPP
                     fDespachos.Show();
                     break;
             }
+        }
+
+        private void Main_Load(object sender, System.EventArgs e)
+        {
+            string ver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            LABEL_VERSION.Text = "Versión App: " + ver;
         }
     }
 }
