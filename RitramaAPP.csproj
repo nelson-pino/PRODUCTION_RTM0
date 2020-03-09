@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\AppRitrama\</OutputPath>
+    <OutputPath>..\TestApp\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -92,10 +92,12 @@
   <ItemGroup>
     <Compile Include="Clases\ClassCustomer.cs" />
     <Compile Include="Clases\ClassDespacho.cs" />
+    <Compile Include="Clases\ClassDevolucion.cs" />
     <Compile Include="Clases\ClassItemsPedidos.cs" />
     <Compile Include="Clases\DespachosManager.cs" />
     <Compile Include="Clases\InventarioManager.cs" />
     <Compile Include="Clases\Items_despacho.cs" />
+    <Compile Include="Clases\Item_Devol.cs" />
     <Compile Include="Clases\Orden.cs" />
     <Compile Include="Clases\ClassPedidos.cs" />
     <Compile Include="Clases\ClassSupply.cs" />
@@ -137,6 +139,12 @@
     </Compile>
     <Compile Include="form\FrmDespacho.Designer.cs">
       <DependentUpon>FrmDespacho.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmDevol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmDevol.Designer.cs">
+      <DependentUpon>FrmDevol.cs</DependentUpon>
     </Compile>
     <Compile Include="form\FrmImportExcelMP.cs">
       <SubType>Form</SubType>
@@ -297,6 +305,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmDespacho.resx">
       <DependentUpon>FrmDespacho.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmDevol.resx">
+      <DependentUpon>FrmDevol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmImportExcelMP.resx">
       <DependentUpon>FrmImportExcelMP.cs</DependentUpon>

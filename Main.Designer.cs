@@ -29,19 +29,20 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Recepciones");
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Ordenes Corte");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Despacho");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Modulo de Inventarios");
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("Productos");
-            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("Customers");
-            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("Proveedores");
-            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("Parametros");
-            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("Listado de rollos cortados por Ubicacion");
-            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("Imprimir Conduce de Despacho");
-            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("Reporte", new System.Windows.Forms.TreeNode[] {
-            treeNode20,
-            treeNode21});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Recepciones");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Ordenes Corte");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Despacho");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Modulo de Inventarios");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Devoluciones");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Productos");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Customers");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("Proveedores");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Parametros");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Listado de rollos cortados por Ubicacion");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Imprimir Conduce de Despacho");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Reporte", new System.Windows.Forms.TreeNode[] {
+            treeNode10,
+            treeNode11});
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -59,38 +60,41 @@
             this.treeView1.Location = new System.Drawing.Point(0, 103);
             this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
-            treeNode12.Name = "Nodo0";
-            treeNode12.Text = "Recepciones";
-            treeNode13.Name = "Nodo2";
-            treeNode13.Text = "Ordenes Corte";
-            treeNode14.Name = "Nodo0";
-            treeNode14.Text = "Despacho";
-            treeNode15.Name = "Nodo3";
-            treeNode15.Text = "Modulo de Inventarios";
-            treeNode16.Name = "Nodo4";
-            treeNode16.Text = "Productos";
-            treeNode17.Name = "Nodo5";
-            treeNode17.Text = "Customers";
-            treeNode18.Name = "Nodo6";
-            treeNode18.Text = "Proveedores";
-            treeNode19.Name = "Nodo1";
-            treeNode19.Text = "Parametros";
-            treeNode20.Name = "Nodo0";
-            treeNode20.Text = "Listado de rollos cortados por Ubicacion";
-            treeNode21.Name = "Nodo1";
-            treeNode21.Text = "Imprimir Conduce de Despacho";
-            treeNode22.Name = "Nodo2";
-            treeNode22.Text = "Reporte";
+            treeNode1.Name = "Nodo0";
+            treeNode1.Text = "Recepciones";
+            treeNode2.Name = "Nodo2";
+            treeNode2.Text = "Ordenes Corte";
+            treeNode3.Name = "Nodo0";
+            treeNode3.Text = "Despacho";
+            treeNode4.Name = "Nodo3";
+            treeNode4.Text = "Modulo de Inventarios";
+            treeNode5.Name = "Nodo1";
+            treeNode5.Text = "Devoluciones";
+            treeNode6.Name = "Nodo4";
+            treeNode6.Text = "Productos";
+            treeNode7.Name = "Nodo5";
+            treeNode7.Text = "Customers";
+            treeNode8.Name = "Nodo6";
+            treeNode8.Text = "Proveedores";
+            treeNode9.Name = "Nodo1";
+            treeNode9.Text = "Parametros";
+            treeNode10.Name = "Nodo0";
+            treeNode10.Text = "Listado de rollos cortados por Ubicacion";
+            treeNode11.Name = "Nodo1";
+            treeNode11.Text = "Imprimir Conduce de Despacho";
+            treeNode12.Name = "Nodo2";
+            treeNode12.Text = "Reporte";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode12,
-            treeNode13,
-            treeNode14,
-            treeNode15,
-            treeNode16,
-            treeNode17,
-            treeNode18,
-            treeNode19,
-            treeNode22});
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode7,
+            treeNode8,
+            treeNode9,
+            treeNode12});
             this.treeView1.SelectedImageIndex = 0;
             this.treeView1.Size = new System.Drawing.Size(157, 640);
             this.treeView1.TabIndex = 0;
@@ -108,7 +112,7 @@
             this.panel1.Location = new System.Drawing.Point(160, 2);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(916, 660);
+            this.panel1.Size = new System.Drawing.Size(916, 640);
             this.panel1.TabIndex = 3;
             // 
             // pictureBox1

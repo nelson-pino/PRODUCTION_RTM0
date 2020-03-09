@@ -87,6 +87,14 @@ namespace RitramaAPP
                     fDespachos.Dock = DockStyle.Fill;
                     fDespachos.Show();
                     break;
+                case "Devoluciones":
+                    panel1.Controls.Clear();
+                    FrmDevol devol  = new FrmDevol();
+                    devol.TopLevel = false;
+                    this.panel1.Controls.Add(devol);
+                    devol.Dock = DockStyle.Fill;
+                    devol.Show();
+                    break;
             }
         }
 
