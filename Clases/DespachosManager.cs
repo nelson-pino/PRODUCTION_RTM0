@@ -6,7 +6,6 @@ using System.Windows.Forms;
 
 namespace RitramaAPP.Clases
 {
-
     public class DespachosManager
     {
         readonly Conexion Micomm = new Conexion();
@@ -27,7 +26,6 @@ namespace RitramaAPP.Clases
         readonly DataTable dtitems = new DataTable();
         readonly DataTable dtproducto = new DataTable();
         public DataSet ds = new DataSet();
-
         public DespachosManager()
         {
             GetProducto();
@@ -259,8 +257,6 @@ namespace RitramaAPP.Clases
                     break;
             }
         }
-
-
         public void Add(ClassDespacho datos, Boolean ismessage)
         {
             //ADD HEADER DE ORDEN DE PRODUCCION A LA BASE DE DATOS.
@@ -272,7 +268,7 @@ namespace RitramaAPP.Clases
             foreach (Items_despacho item in datos.items)
             {
                 CommandSqlGeneric(R.SQL.DATABASE.NAME, R.SQL.QUERY_SQL.DESPACHOS.SQL_INSERT_HEADER_DETAILS_DESPACHO,
-                SetParametersAddDetailsDespacho(item, datos.numero), ismessage,
+                SetParametersAddDetailsDespacho(item, datos.Numero), ismessage,
                 R.ERROR_MESSAGES.DESPACHOS.MESSAGE_INSERT_ERROR_ADD_DETAILS_DESPACHOS);
             }
         }
@@ -308,20 +304,20 @@ namespace RitramaAPP.Clases
         {
             List<SqlParameter> sp = new List<SqlParameter>()
             {
-                new SqlParameter() {ParameterName = "@p1", SqlDbType = SqlDbType.NVarChar, Value = datos.numero},
-                new SqlParameter() {ParameterName = "@p2", SqlDbType = SqlDbType.DateTime, Value = datos.fecha_despacho},
-                new SqlParameter() {ParameterName = "@p3", SqlDbType = SqlDbType.NVarChar, Value = datos.curstomer_id},
-                new SqlParameter() {ParameterName = "@p4", SqlDbType = SqlDbType.NVarChar, Value = datos.persona_entrega},
-                new SqlParameter() {ParameterName = "@p5", SqlDbType = SqlDbType.NVarChar, Value = datos.vendedor_id},
-                new SqlParameter() {ParameterName = "@p6", SqlDbType = SqlDbType.NVarChar, Value = datos.transport_id},
-                new SqlParameter() {ParameterName = "@p7", SqlDbType = SqlDbType.NVarChar, Value = datos.chofer_id},
-                new SqlParameter() {ParameterName = "@p8", SqlDbType = SqlDbType.NVarChar, Value = datos.placas_id},
-                new SqlParameter() {ParameterName = "@p9", SqlDbType = SqlDbType.NVarChar, Value = datos.tipo_embalaje},
-                new SqlParameter() {ParameterName = "@p10", SqlDbType = SqlDbType.NVarChar, Value = datos.orden_trabajo},
-                new SqlParameter() {ParameterName = "@p11", SqlDbType = SqlDbType.NVarChar, Value = datos.orden_compra},
-                new SqlParameter() {ParameterName = "@p12", SqlDbType = SqlDbType.Decimal, Value = datos.subtotal},
-                new SqlParameter() {ParameterName = "@p13", SqlDbType = SqlDbType.Decimal, Value = datos.monto_itbis},
-                new SqlParameter() {ParameterName = "@p14", SqlDbType = SqlDbType.Decimal, Value = datos.total},
+                new SqlParameter() {ParameterName = "@p1", SqlDbType = SqlDbType.NVarChar, Value = datos.Numero},
+                new SqlParameter() {ParameterName = "@p2", SqlDbType = SqlDbType.DateTime, Value = datos.Fecha_despacho},
+                new SqlParameter() {ParameterName = "@p3", SqlDbType = SqlDbType.NVarChar, Value = datos.Curstomer_id},
+                new SqlParameter() {ParameterName = "@p4", SqlDbType = SqlDbType.NVarChar, Value = datos.Persona_entrega},
+                new SqlParameter() {ParameterName = "@p5", SqlDbType = SqlDbType.NVarChar, Value = datos.Vendedor_id},
+                new SqlParameter() {ParameterName = "@p6", SqlDbType = SqlDbType.NVarChar, Value = datos.Transport_id},
+                new SqlParameter() {ParameterName = "@p7", SqlDbType = SqlDbType.NVarChar, Value = datos.Chofer_id},
+                new SqlParameter() {ParameterName = "@p8", SqlDbType = SqlDbType.NVarChar, Value = datos.Placas_id},
+                new SqlParameter() {ParameterName = "@p9", SqlDbType = SqlDbType.NVarChar, Value = datos.Tipo_embalaje},
+                new SqlParameter() {ParameterName = "@p10", SqlDbType = SqlDbType.NVarChar, Value = datos.Orden_trabajo},
+                new SqlParameter() {ParameterName = "@p11", SqlDbType = SqlDbType.NVarChar, Value = datos.Orden_compra},
+                new SqlParameter() {ParameterName = "@p12", SqlDbType = SqlDbType.Decimal, Value = datos.Subtotal},
+                new SqlParameter() {ParameterName = "@p13", SqlDbType = SqlDbType.Decimal, Value = datos.Monto_itbis},
+                new SqlParameter() {ParameterName = "@p14", SqlDbType = SqlDbType.Decimal, Value = datos.Total},
             };
             return sp;
         }
@@ -516,6 +512,95 @@ namespace RitramaAPP.Clases
                 return lista;
             }
         }
+        public Boolean AddPalet(List<Paleta> lista) 
+        {
+            try
+            {
+                foreach (Paleta item in lista) 
+                {
+                    if (!string.IsNullOrEmpty(item.Medida) && !string.IsNullOrEmpty(item.Contenido))
+                        
+                    {
+                        CommandSqlGeneric(R.DATABASES.RITRAMA, R.SQL.QUERY_SQL.DESPACHOS.SQL_INSERT_DATA_PALET_DESPACHO,
+                            SetParametersAddDataPalet(item), false, "");
+                    }
+                    
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(R.ERROR_MESSAGES.DESPACHOS.MESSAGE_SELECT_ADDPALET + ex);
+                return false;
+            }
 
+        }
+        public List<SqlParameter> SetParametersAddDataPalet(Paleta datos)
+        {
+          
+            List<SqlParameter> sp = new List<SqlParameter>()
+            {
+                new SqlParameter() {ParameterName = "@p1", SqlDbType = SqlDbType.NVarChar, Value = datos.Numero},
+                new SqlParameter() {ParameterName = "@p2", SqlDbType = SqlDbType.NVarChar, Value = datos.Number_palet},
+                new SqlParameter() {ParameterName = "@p3", SqlDbType = SqlDbType.NVarChar, Value = datos.Medida},
+                new SqlParameter() {ParameterName = "@p4", SqlDbType = SqlDbType.NVarChar, Value = datos.Contenido},
+                new SqlParameter() {ParameterName = "@p5", SqlDbType = SqlDbType.Decimal, Value = datos.Kilo_neto},
+                new SqlParameter() {ParameterName = "@p6", SqlDbType = SqlDbType.Decimal, Value = datos.Kilo_bruto},
+            };
+            return sp;
+        }
+        public List<Paleta> GetDataPalet(string conduce) 
+        {
+            List<Paleta> lista = new List<Paleta>();
+            try
+            {
+                Micomm.Conectar(R.SQL.DATABASE.NAME);
+                SqlCommand comando = new SqlCommand
+                {
+                    Connection = Micomm.cnn,
+                    CommandType = CommandType.Text,
+                    CommandText = R.SQL.QUERY_SQL.DESPACHOS.SQL_SELECT_DATA_PALET_DESPACHO
+                };
+                SqlParameter p1 = new SqlParameter("@p1", conduce);
+                comando.Parameters.Add(p1);
+                SqlDataReader reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    Paleta rollo = new Paleta
+                    {
+                        Number_palet = reader.GetString(0),
+                        Medida = reader.GetString(1),
+                        Contenido = reader.GetString(2),
+                        Kilo_bruto = reader.GetDecimal(3),
+                        Kilo_neto = reader.GetDecimal(4),
+                        Numero = reader.GetString(5)
+                    };
+                    lista.Add(rollo);
+                }
+                comando.Dispose();
+                Micomm.Desconectar();
+                return lista;
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(R.ERROR_MESSAGES.DESPACHOS.
+                    MESSAGE_SELECT_GETDATAPALET + ex);
+                return lista;
+            }
+        }
+        public bool DeletePalet(string numero)
+        {
+            try
+            {
+                CommandSqlGenericOneParameter(R.DATABASES.RITRAMA, 
+                R.SQL.QUERY_SQL.DESPACHOS.SQL_DELETE_DATA_PALET_DESPACHO,numero,false,"");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
     }
 }

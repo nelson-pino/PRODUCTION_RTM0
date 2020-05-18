@@ -13,12 +13,10 @@ namespace RitramaAPP.Clases
         public string Id_Cust { get; set; }
         public string Razon { get; set; }
         public bool DocAnulado { get; set; }
-        List<Item_Devol> items;
+        public readonly List<Item_Devol> items;
         public ClassDevolucion()
         {
-            this.items = new List<Item_Devol>();
+            items = new List<Item_Devol>();
         }
-
-
     }
 }

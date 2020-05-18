@@ -12,7 +12,7 @@ namespace RitramaAPP.Clases
         {
             try
             {
-                cnn = new SqlConnection(@"Server=" + R.SERVERS.SERVER_RITRAMA +
+                cnn = new SqlConnection(@"Server=" + R.SERVERS.SERVER_ETIQUETAS +
                     ";Database=" + bd + ";User Id=" + R.USERS.UserMaster +
                     ";Password="+ R.USERS.KeyMaster + ";");
                 cnn.Open();

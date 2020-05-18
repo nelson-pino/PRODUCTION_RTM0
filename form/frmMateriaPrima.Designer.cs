@@ -284,7 +284,7 @@
             this.txt_roll_id.ReadOnly = true;
             this.txt_roll_id.Size = new System.Drawing.Size(143, 20);
             this.txt_roll_id.TabIndex = 3;
-            this.txt_roll_id.Validating += new System.ComponentModel.CancelEventHandler(this.txt_roll_id_Validating);
+            this.txt_roll_id.Validating += new System.ComponentModel.CancelEventHandler(this.Txt_roll_id_Validating);
             // 
             // txt_ubic
             // 
@@ -334,8 +334,8 @@
             this.txt_lenght.ReadOnly = true;
             this.txt_lenght.Size = new System.Drawing.Size(182, 20);
             this.txt_lenght.TabIndex = 9;
-            this.txt_lenght.TextChanged += new System.EventHandler(this.txt_lenght_TextChanged);
-            this.txt_lenght.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_lenght_KeyPress);
+            this.txt_lenght.TextChanged += new System.EventHandler(this.Txt_lenght_TextChanged);
+            this.txt_lenght.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_lenght_KeyPress);
             this.txt_lenght.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Txt_lenght_KeyUp);
             // 
             // panel1
@@ -347,7 +347,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(908, 82);
+            this.panel1.Size = new System.Drawing.Size(992, 82);
             this.panel1.TabIndex = 33;
             // 
             // label15
@@ -369,7 +369,7 @@
             this.txt_width.ReadOnly = true;
             this.txt_width.Size = new System.Drawing.Size(143, 20);
             this.txt_width.TabIndex = 8;
-            this.txt_width.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txt_width_KeyPress);
+            this.txt_width.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Txt_width_KeyPress);
             this.txt_width.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Txt_width_KeyUp);
             // 
             // toolsbar
@@ -389,7 +389,7 @@
             this.bot_excel});
             this.toolsbar.Location = new System.Drawing.Point(0, 82);
             this.toolsbar.Name = "toolsbar";
-            this.toolsbar.Size = new System.Drawing.Size(908, 27);
+            this.toolsbar.Size = new System.Drawing.Size(992, 27);
             this.toolsbar.TabIndex = 35;
             this.toolsbar.Text = "toolStrip1";
             this.toolsbar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.Toolsbar_ItemClicked);
@@ -504,7 +504,7 @@
             this.bot_excel.Name = "bot_excel";
             this.bot_excel.Size = new System.Drawing.Size(80, 24);
             this.bot_excel.Text = "Import";
-            this.bot_excel.Click += new System.EventHandler(this.bot_excel_Click);
+            this.bot_excel.Click += new System.EventHandler(this.Bot_excel_Click);
             // 
             // CHK_ANULADO
             // 
@@ -844,7 +844,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(908, 609);
+            this.ClientSize = new System.Drawing.Size(992, 609);
             this.Controls.Add(this.label22);
             this.Controls.Add(this.Txt_fecha_recep);
             this.Controls.Add(this.txt_width_metros);

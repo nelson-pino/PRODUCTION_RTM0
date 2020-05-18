@@ -15,22 +15,24 @@ namespace RitramaAPP.form
         public FrmDespacho()
         {
             InitializeComponent();
-        }
+        } 
         readonly DespachosManager despachomanager = new DespachosManager();
+        readonly ReportsManager reportManager = new ReportsManager();
         DataSet ds = new DataSet();
         readonly BindingSource bs = new BindingSource();
         readonly ConfigManager config = new ConfigManager();
         readonly BindingSource bsitem = new BindingSource();
         DataRowView ParentRow, ChildRows;
-        int EditMode = 0, Consec = 0;
+        int EditMode = 0, Consec = 0, UpdatePaleta = 0;
         readonly decimal PORC_ITBIS = 18;
         ClassDespacho despacho;
         readonly List<Roll_Details> listarc = new List<Roll_Details>();
+        List<Paleta> ListPalet = new List<Paleta>();
         private void FrmDespacho_Load(object sender, EventArgs e)
         {
             AplicarEstilosGrid();
             ENLACE_DATOS();
-            LoadDataRC();
+            RefreshFormData();
         }
        
         #region DATOS_PICKING
@@ -264,26 +266,26 @@ namespace RitramaAPP.form
         {
             despacho = new ClassDespacho
             {
-                numero = (txt_numero_despacho.Text),
-                fecha_despacho = Convert.ToDateTime(txt_fecha_despacho.Text),
-                curstomer_id = txt_customer_id.Text,
-                curstomer_name = txt_customer_name.Text,
-                curstomer_direc = txt_customer_direc.Text,
-                persona_entrega = txt_contact_person.Text,
-                vendedor_id = txt_vendor_id.Text,
-                vendedor_name = txt_vendor_name.Text,
-                transport_id = txt_transport_id.Text,
-                transport_name = txt_transport_name.Text,
-                chofer_id = txt_chofer_id.Text,
-                chofer_name = txt_chofer_name.Text,
-                placas_id = txt_placas.Text,
-                modelo_camion = txt_camion.Text,
-                tipo_embalaje = txt_tipo_embalaje.Text,
-                orden_trabajo = txt_otrabajo.Text,
-                orden_compra = txt_ocompra.Text,
-                subtotal = Convert.ToDecimal(txt_subtotal.Text),
-                monto_itbis = Convert.ToDecimal(txt_monto_itbis.Text),
-                total = Convert.ToDecimal(txt_total_despacho.Text)
+                Numero = (txt_numero_despacho.Text),
+                Fecha_despacho = Convert.ToDateTime(txt_fecha_despacho.Text),
+                Curstomer_id = txt_customer_id.Text,
+                Curstomer_name = txt_customer_name.Text,
+                Curstomer_direc = txt_customer_direc.Text,
+                Persona_entrega = txt_contact_person.Text,
+                Vendedor_id = txt_vendor_id.Text,
+                Vendedor_name = txt_vendor_name.Text,
+                Transport_id = txt_transport_id.Text,
+                Transport_name = txt_transport_name.Text,
+                Chofer_id = txt_chofer_id.Text,
+                Chofer_name = txt_chofer_name.Text,
+                Placas_id = txt_placas.Text,
+                Modelo_camion = txt_camion.Text,
+                Tipo_embalaje = txt_tipo_embalaje.Text,
+                Orden_trabajo = txt_otrabajo.Text,
+                Orden_compra = txt_ocompra.Text,
+                Subtotal = Convert.ToDecimal(txt_subtotal.Text),
+                Monto_itbis = Convert.ToDecimal(txt_monto_itbis.Text),
+                Total = Convert.ToDecimal(txt_total_despacho.Text)
             };
             despacho.items = new List<Items_despacho>();
             for (int fila = 0; fila <= grid_items.Rows.Count - 1; fila++)
@@ -375,6 +377,12 @@ namespace RitramaAPP.form
                     grid_items.Enabled = true;
                     grid_items.ReadOnly = false;
                     grid_items.Columns["total_renglon"].ReadOnly = true;
+                    grid_paleta.ReadOnly = false;
+                    grid_paleta.Columns[0].ReadOnly = true;
+                    //abrir el detalle de paleta.
+                    bot_addpalet.Enabled = true;
+                    bot_deletepalet.Enabled = true;
+                    bot_UpdatePalet.Enabled = false;
                     break;
                 case 1:
                     // cerrar el formulario para no permitir mas cambio y colocarlo en modo readonly.
@@ -391,7 +399,9 @@ namespace RitramaAPP.form
                     bot_transport_search.Enabled = false;
                     bot_agregar_renglon.Enabled = false;
                     bot_sincro.Enabled = false;
-                    grid_items.Enabled = false;
+                    grid_items.ReadOnly = true;
+                    grid_paleta.Enabled = false;
+                    bot_UpdatePalet.Enabled = true;
                     break;
                 case 2:
                     break;
@@ -425,7 +435,7 @@ namespace RitramaAPP.form
                 rowcurrent = (DataRowView)bs.Current;
                 rowcurrent.Row.Delete();
                 bs.EndEdit();
-                ContadorRegistros();
+                RefreshFormData();
                 bs.Position = bs.Count - 1;
                 //activo la funciones del menu
                 OptionsMenu(1);
@@ -504,17 +514,16 @@ namespace RitramaAPP.form
             despachomanager.Add(CrearObjectDespacho(), false);
             // grabar el detalle de los uniques code
             despachomanager.AddRC(listarc, txt_numero_despacho.Text.Trim());
+            despachomanager.AddPalet(ListPalet);
             //grabar el consecutivo en la tabla de parametros.
             config.SetParametersControl(Consec.ToString(), "CONSEC_DP");
             //Actualizar los inventarios
             Actualizarinventarios();
-
             OptionsMenu(1);
             OptionsForm(1);
-
             //BORRO LA LISTA DE ID.
             listarc.Clear();
-
+            ListPalet.Clear();
         }
         private void ToSaveUpdate()
         {
@@ -569,133 +578,30 @@ namespace RitramaAPP.form
             grid_UniqueCode.DataSource = "";
             grid_items.Focus();
             grid_items.Rows[0].Cells[0].Selected = true;
+            grid_paleta.DataSource = "";
+            total_kilos1.Text = "0";
+            total_kilos2.Text = "0";
         }
         #endregion
         #region IMPRESION
         private void BOT_IMPRIMIR_Click(object sender, EventArgs e)
         {
             //entra al detalle de los Unique Code RC
-            if (chk_print_unique.Checked)
+            if (ra_reporte1.Checked)
             {
-                using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
-                {
-                    
-                    ReportDocument reporte = new ReportDocument();
-                    TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
-                    TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
-
-                    reporte.Load(Application.StartupPath + R.PATH_FILES.PATH_REPORTS_DETALLE_RC);
-                    reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
-
-                    Tables CrTables;
-                    CrTables = reporte.Database.Tables;
-
-                    ConnectionInfo ConexInfo = new ConnectionInfo
-                    {
-                        ServerName = R.SERVERS.SERVER_RITRAMA,
-                        DatabaseName = R.DATABASES.RITRAMA,
-                        UserID = R.USERS.UserMaster,
-                        Password = R.USERS.KeyMaster
-                    };
-
-                    foreach (Table table in CrTables)
-                    {
-                        crtablelogoninfo = table.LogOnInfo;
-                        crtablelogoninfo.ConnectionInfo = ConexInfo;
-                        table.ApplyLogOnInfo(crtablelogoninfo);
-                    }
-                    
-                   
-                    frmReportView.crystalReportViewer1.ReportSource = reporte;
-                    frmReportView.Refresh();
-                    frmReportView.crystalReportViewer1.Zoom(80);
-                    frmReportView.Text = "Detalle de los Unique Code (RC)";
-                    frmReportView.Width = 900;
-                    frmReportView.Height = 700;
-                    frmReportView.Refresh();
-                    frmReportView.ShowDialog();
-                }
+                reportManager.Conduce_Precio(txt_numero_despacho.Text);
             }
-            //formato de conduce sin precio
-            else if (chk_without_price.Checked)
+            if (ra_reporte2.Checked)
             {
-                using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
-                {
-                    ReportDocument reporte = new ReportDocument();
-                    TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
-                    TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
-
-                    reporte.Load(Application.StartupPath + R.PATH_FILES.PATH_REPORTS_FORMAT_CONDUCE_SP);
-                    reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
-                    
-                    Tables CrTables;
-                    CrTables = reporte.Database.Tables;
-
-                    ConnectionInfo ConexInfo = new ConnectionInfo
-                    {
-                        ServerName = R.SERVERS.SERVER_RITRAMA,
-                        DatabaseName = R.DATABASES.RITRAMA,
-                        UserID = R.USERS.UserMaster,
-                        Password = R.USERS.KeyMaster
-                    };
-
-                    foreach (Table table in CrTables)
-                    {
-                        crtablelogoninfo = table.LogOnInfo;
-                        crtablelogoninfo.ConnectionInfo = ConexInfo;
-                        table.ApplyLogOnInfo(crtablelogoninfo);
-                    }
-
-                    frmReportView.crystalReportViewer1.ReportSource = reporte;
-                    frmReportView.crystalReportViewer1.Zoom(140);
-                    frmReportView.Text = "(Formato de Conduce Ritrama Sin precio)";
-                    frmReportView.Width = 900;
-                    frmReportView.Height = 700;
-                    frmReportView.ShowDialog();
-                }
-
+                reportManager.Conduce_sin_Precio(txt_numero_despacho.Text);
             }
-            //formato de conduce con precio
-            else
+            if (ra_reporte3.Checked)
             {
-                using (FrmReportViewCrystal frmReportView = new FrmReportViewCrystal())
-                {
-                    ReportDocument reporte = new ReportDocument();
-                    
-                    TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
-                    TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
-
-                    reporte.Load(Application.StartupPath +  R.PATH_FILES.PATH_REPORTS_FORMAT_CONDUCE);
-                    reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
-
-                    ConnectionInfo ConexInfo = new ConnectionInfo
-                    {
-                        ServerName = "ritramasrv01",
-                        DatabaseName = "ritrama",
-                        UserID = "Npino",
-                        Password = "Jossycar5%"
-                    };
-                    
-                    Tables CrTables;
-                    CrTables = reporte.Database.Tables;
-
-                    
-                    foreach (Table table in CrTables)
-                    {
-                        crtablelogoninfo = table.LogOnInfo;
-                        
-                        crtablelogoninfo.ConnectionInfo = ConexInfo;
-                        table.ApplyLogOnInfo(crtablelogoninfo);
-                    }
-
-                    frmReportView.crystalReportViewer1.ReportSource = reporte;
-                    frmReportView.crystalReportViewer1.Zoom(140);
-                    frmReportView.Text = "Formato de Conduce Ritrama";
-                    frmReportView.Width = 900;
-                    frmReportView.Height = 700;
-                    frmReportView.Refresh();
-                    frmReportView.ShowDialog();
-                }
+                reportManager.Detalle_RC(txt_numero_despacho.Text);
+            }
+            if (ra_reporte4.Checked)
+            {
+                reportManager.Detalle_Paleta(txt_numero_despacho.Text);
             }
         }
         #endregion
@@ -737,6 +643,7 @@ namespace RitramaAPP.form
             //grid renglones
             grid_items.AutoGenerateColumns = false;
             AGREGAR_COLUMN_GRID("product_id", 50, "Product Id.", "product_id", grid_items);
+
             AGREGAR_COLUMN_GRID("product_name", 180, "Nombre del Producto", "product_name", grid_items);
             AGREGAR_COLUMN_GRID("unidad", 50, "Unidad", "unid_id", grid_items);
             DataGridViewButtonColumn col3 = new DataGridViewButtonColumn
@@ -773,6 +680,21 @@ namespace RitramaAPP.form
             AGREGAR_COLUMN_GRID("tipo_mov", 25, "tipo_mov", "tipo_mov", grid_UniqueCode);
             grid_items.Columns["action"].Visible = false;
             grid_UniqueCode.Columns["action"].Visible = false;
+            //GRID PALETA
+            grid_paleta.AutoGenerateColumns = false;
+            AGREGAR_COLUMN_GRID("number_palet", 40, "# Paleta", "number_palet", grid_paleta);
+            AGREGAR_COLUMN_GRID("medida", 50, "Medida", "medida", grid_paleta);
+            AGREGAR_COLUMN_GRID("contenido", 250, "Contenido", "contenido", grid_paleta);
+            DataGridViewButtonColumn contectCol = new DataGridViewButtonColumn
+            {
+                Name = "content",
+                Width = 20,
+                HeaderText = "..."
+            };
+            grid_paleta.Columns.Add(contectCol);
+            AGREGAR_COLUMN_GRID("Kilos_netos", 50, "Kilos Netos", "kilo_neto", grid_paleta);
+            AGREGAR_COLUMN_GRID("Kilos_brutos", 50, "Kilos Brutos", "kilo_bruto", grid_paleta);
+            grid_paleta.Columns[2].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
         #endregion
         #region BOTONES_BUSQUEDA_MENU
@@ -780,7 +702,7 @@ namespace RitramaAPP.form
         {
             using (SeleccionCustomers selectcustomer = new SeleccionCustomers())
             {
-                selectcustomer.dtcustomer = ds.Tables["dtcustomer"];
+                selectcustomer.Dtcustomer = ds.Tables["dtcustomer"];
                 selectcustomer.ShowDialog();
                 txt_customer_id.Text = selectcustomer.GetCustomerId;
                 txt_customer_name.Text = selectcustomer.GetCustomerName;
@@ -833,29 +755,31 @@ namespace RitramaAPP.form
         private void BOT_SIGUIENTE_Click(object sender, EventArgs e)
         {
             bs.Position += 1;
-            ContadorRegistros();
-            LoadDataRC();
+            RefreshFormData();
         }
 
         private void BOT_ANTERIOR_Click(object sender, EventArgs e)
         {
             bs.Position -= 1;
-            ContadorRegistros();
-            LoadDataRC();
+            RefreshFormData();
         }
 
         private void BOT_PRIMERO_Click(object sender, EventArgs e)
         {
             bs.Position = 0;
+            RefreshFormData();
+        }
+        private void RefreshFormData() 
+        {
             ContadorRegistros();
             LoadDataRC();
+            DatosPaleta();
         }
 
         private void BOT_ULTIMO_Click(object sender, EventArgs e)
         {
             bs.Position = bs.Count - 1;
-            ContadorRegistros();
-            LoadDataRC();
+            RefreshFormData();
         }
         #endregion
         #region INTERFACE-GRID
@@ -912,31 +836,7 @@ namespace RitramaAPP.form
         {
             FrmReportViewCrystal frmReportView = new FrmReportViewCrystal();
             ReportDocument reporte = new ReportDocument();
-            //TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
-            //TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
-
             reporte.Load(Application.StartupPath + @"\Reports\ConduceConPrecio.rpt");
-            //reporte.SetParameterValue("NUMERO", txt_numero_despacho.Text.Trim());
-
-            //Tables CrTables;
-            //CrTables = reporte.Database.Tables;
-
-            //ConnectionInfo ConexInfo = new ConnectionInfo
-            //{
-            //    ServerName = R.SERVERS.SERVER_RITRAMA,
-            //    DatabaseName = R.DATABASES.RITRAMA,
-            //    UserID = R.USERS.UserMaster,
-            //    Password = R.USERS.KeyMaster
-            //};
-
-            //foreach (Table table in CrTables)
-            //{
-            //    crtablelogoninfo = table.LogOnInfo;
-            //    crtablelogoninfo.ConnectionInfo = ConexInfo;
-            //    table.ApplyLogOnInfo(crtablelogoninfo);
-            //}
-
-
             frmReportView.crystalReportViewer1.ReportSource = reporte;
             frmReportView.Refresh();
             frmReportView.crystalReportViewer1.Zoom(80);
@@ -945,7 +845,63 @@ namespace RitramaAPP.form
             frmReportView.Height = 700;
             frmReportView.Refresh();
             frmReportView.ShowDialog();
+        }
 
+        private void BOT_BUSCAR_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Bot_addpalet_Click(object sender, EventArgs e)
+        {
+            if (!ValidRowPalet())
+            {
+                return;
+            }
+            Paleta item = new Paleta
+            {
+                Number_palet = (ListPalet.Count +1).ToString(),
+                Numero = txt_numero_despacho.Text,
+                Medida="",
+                Contenido=""
+            };
+            ListPalet.Add(item);
+            grid_paleta.DataSource = null;
+            grid_paleta.DataSource = ListPalet;
+            if (ListPalet.Count > 0)
+            {
+                bot_deletepalet.Enabled = true;
+            }
+            if (ListPalet.Count > 1) 
+            {
+                grid_paleta.CurrentCell = grid_paleta[1, ListPalet.Count - 1];
+            }
+            
+        }
+
+        private void Grid_paleta_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == 3) 
+            {
+                frmContentPalet ContentPalet = new frmContentPalet();
+                if(grid_paleta.Rows[e.RowIndex].Cells[2].Value == null) 
+                {
+                    grid_paleta.Rows[e.RowIndex].Cells[2].Value = "";
+                }
+                ContentPalet.ContentText = grid_paleta.Rows[e.RowIndex].Cells[2].Value.ToString();
+                ContentPalet.ShowDialog();
+                grid_paleta.Rows[e.RowIndex].Cells[2].Value = ContentPalet.ContentText;
+            }
+        }
+
+        private void Bot_SavePalet_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Bot_loadpalet_Click(object sender, EventArgs e)
+        {
+            grid_paleta.DataSource = despachomanager.GetDataPalet(txt_numero_despacho.Text);
         }
 
         private void Grid_items_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -985,6 +941,124 @@ namespace RitramaAPP.form
                 }
                 SendKeys.Send("{TAB}");
             }
+        }
+
+        private void Bot_deletepalet_Click(object sender, EventArgs e)
+        {
+            if (ListPalet.Count == 1) 
+            {
+                return;
+            }
+            var itemToRemove = ListPalet.Single(r => r.Number_palet ==
+            Convert.ToString(grid_paleta.Rows[grid_paleta.CurrentRow.Index].Cells["number_palet"].Value));
+            ListPalet.Remove(itemToRemove);
+            int row = 1;
+            foreach (Paleta item in ListPalet)
+            {
+                item.Number_palet = row.ToString();
+                row++;
+            }
+            grid_paleta.DataSource = null;
+            grid_paleta.DataSource = ListPalet;
+        }
+        private void Bot_UpdatePalet_Click(object sender, EventArgs e)
+        {
+            if (UpdatePaleta == 0) 
+            {
+                
+                if (grid_paleta.Rows.Count == 0)
+                {
+                    ListPalet.Clear();
+                    Paleta item = new Paleta
+                    {
+                        Number_palet = (ListPalet.Count + 1).ToString(),
+                        Numero = txt_numero_despacho.Text,
+                    };
+                    ListPalet.Add(item);
+                    grid_paleta.DataSource = null;
+                    grid_paleta.DataSource = ListPalet;
+                    grid_items.Refresh();
+                }
+                if(grid_paleta.Rows.Count > 0)
+                {
+                    ListPalet = (List<Paleta>)grid_paleta.DataSource;
+                }
+                bot_UpdatePalet.Text = "Save";
+                bot_addpalet.Enabled = true;
+                bot_deletepalet.Enabled = true;
+                grid_paleta.ReadOnly = false;
+                UpdatePaleta = 1;
+            }
+            else 
+            {
+                //Borro la paleta anterior en BD.
+                despachomanager.DeletePalet(txt_numero_despacho.Text);
+                //Agrego la nueva Paleta
+                despachomanager.AddPalet(ListPalet);
+                bot_UpdatePalet.Text = "Modif";
+                bot_addpalet.Enabled = false;
+                bot_deletepalet.Enabled = false;
+                grid_paleta.ReadOnly = true;
+                UpdatePaleta = 0;
+            }
+        }
+
+        private void Grid_paleta_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 4 || e.ColumnIndex == 5)
+            {
+                TotalkilosPalet();
+            }
+        }
+
+        private void DatosPaleta() 
+        {
+            grid_paleta.DataSource = despachomanager.GetDataPalet(txt_numero_despacho.Text);
+            TotalkilosPalet();
+        }
+        private bool ValidRowPalet()
+        {
+            Boolean chk = true;
+            for (int i = 0; i <= grid_paleta.Rows.Count - 1; i++)
+            {
+                if (Convert.ToString(grid_paleta.Rows[i].Cells["medida"].Value) == "")
+                {
+                    MessageBox.Show("Datos de la medida de paleta.?");
+                    chk = false;
+                    break;
+                }
+                if (Convert.ToString(grid_paleta.Rows[i].Cells["contenido"].Value) == "")
+                {
+                    MessageBox.Show("Introduzca el contenido de la paleta.?");
+                    chk = false;
+                    break;
+                }
+                if (Convert.ToDecimal(grid_paleta.Rows[i].Cells["kilos_netos"].Value) <= 0)
+                {
+                    MessageBox.Show("Kilo neto.?");
+                    chk = false;
+                    break;
+                }
+                if (Convert.ToDecimal(grid_paleta.Rows[i].Cells["kilos_brutos"].Value) <= 0)
+                {
+                    MessageBox.Show("Kilo bruto.?");
+                    chk = false;
+                    break;
+                }
+            }
+            return chk;
+        }
+        private void TotalkilosPalet() 
+        {
+            decimal tk_brutos = 0;
+            decimal tk_netos = 0;
+            for (int i = 0; i <= grid_paleta.Rows.Count-1; i++) 
+            {
+                tk_netos += Convert.ToDecimal(grid_paleta.Rows[i].Cells["kilos_netos"].Value);
+                tk_brutos += Convert.ToDecimal(grid_paleta.Rows[i].Cells["kilos_brutos"].Value);
+            }
+            total_kilos1.Text = tk_netos.ToString();
+            total_kilos2.Text = tk_brutos.ToString();
         }
         #endregion
     }

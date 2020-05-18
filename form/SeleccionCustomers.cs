@@ -10,8 +10,8 @@ namespace RitramaAPP.form
         {
             InitializeComponent();
         }
-        public DataTable dtcustomer { get; set; }
-        public string itemSelected { get; set; }
+        public DataTable Dtcustomer { get; set; }
+        public string ItemSelected { get; set; }
         public string GetCustomerId { get; set; }
         public string GetCustomerName { get; set; }
         public string GetCustomerDirecc { get; set; }
@@ -20,25 +20,31 @@ namespace RitramaAPP.form
         DataView dv = new DataView();
         private void SeleccionCustomers_Load(object sender, EventArgs e)
         {
-            dv = dtcustomer.DefaultView;
+            dv = Dtcustomer.DefaultView;
             grid_customers.AutoGenerateColumns = false;
-            DataGridViewTextBoxColumn col1 = new DataGridViewTextBoxColumn();
-            col1.Name = "customer_id";
-            col1.Width = 60;
-            col1.HeaderText = "Codigo";
-            col1.DataPropertyName = "Customer_ID";
+            DataGridViewTextBoxColumn col1 = new DataGridViewTextBoxColumn
+            {
+                Name = "customer_id",
+                Width = 60,
+                HeaderText = "Codigo",
+                DataPropertyName = "Customer_ID"
+            };
             grid_customers.Columns.Add(col1);
-            DataGridViewTextBoxColumn col2 = new DataGridViewTextBoxColumn();
-            col2.Name = "customer_name";
-            col2.Width = 390;
-            col2.HeaderText = "Customer Name";
-            col2.DataPropertyName = "Customer_Name";
+            DataGridViewTextBoxColumn col2 = new DataGridViewTextBoxColumn
+            {
+                Name = "customer_name",
+                Width = 390,
+                HeaderText = "Customer Name",
+                DataPropertyName = "Customer_Name"
+            };
             grid_customers.Columns.Add(col2);
-            DataGridViewTextBoxColumn col3 = new DataGridViewTextBoxColumn();
-            col3.Name = "Customer_Dir";
-            col3.Width = 100;
-            col3.HeaderText = "Direccion";
-            col3.DataPropertyName = "Customer_Dir";
+            DataGridViewTextBoxColumn col3 = new DataGridViewTextBoxColumn
+            {
+                Name = "Customer_Dir",
+                Width = 100,
+                HeaderText = "Direccion",
+                DataPropertyName = "Customer_Dir"
+            };
             grid_customers.Columns.Add(col3);
             dv.RowFilter = "";
             grid_customers.DataSource = dv;
@@ -59,7 +65,7 @@ namespace RitramaAPP.form
 
         private void Grid_customers_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            itemSelected = grid_customers.Rows[e.RowIndex].Cells[0].Value.ToString();
+            ItemSelected = grid_customers.Rows[e.RowIndex].Cells[0].Value.ToString();
             GetCustomerId = grid_customers.Rows[e.RowIndex].Cells[0].Value.ToString();
             GetCustomerName = grid_customers.Rows[e.RowIndex].Cells[1].Value.ToString();
             GetCustomerDirecc = grid_customers.Rows[e.RowIndex].Cells[2].Value.ToString();

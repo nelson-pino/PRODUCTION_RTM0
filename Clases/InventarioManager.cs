@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Windows.Forms;
-
-namespace RitramaAPP.Clases
+﻿namespace RitramaAPP.Clases
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.IO;
+    using System.Linq;
+    using System.Windows.Forms;
     public class InventarioManager
     {
         readonly Conexion Micomm = new Conexion();
@@ -105,6 +105,48 @@ namespace RitramaAPP.Clases
             da.Dispose();
             return dt;
         }
+        public Boolean CommandSqlGenericTreeParameters(string db, string query, object par1, object par2, object par3, Boolean msg, string messagerror, int process)
+        {
+            // Ejecuta comando sql query y no devuleve ni valor ni datos.
+            try
+            {
+                Micomm.Conectar(db);
+                SqlCommand comando = new SqlCommand
+                {
+                    Connection = Micomm.cnn,
+                    CommandType = CommandType.Text,
+                    CommandText = query
+                };
+                switch (process)
+                {
+                    case 1:
+                        string po1 = par1.ToString();
+                        int po2 = Convert.ToInt16(par2);
+                        DateTime po3 = Convert.ToDateTime(par3);
+                        break;
+                }
+
+                SqlParameter p1 = new SqlParameter("@p1", par1);
+                SqlParameter p2 = new SqlParameter("@p2", par2);
+                SqlParameter p3 = new SqlParameter("@p3", par3);
+                comando.Parameters.Add(@p1);
+                comando.Parameters.Add(@p2);
+                comando.Parameters.Add(@p3);
+                comando.ExecuteNonQuery();
+                comando.Dispose();
+                Micomm.Desconectar();
+                if (msg)
+                {
+                    MessageBox.Show("proceso realizado con exito...");
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(messagerror + ex);
+                return false;
+            }
+        }
         public List<Item> GetDataIni()
         {
             //extraer data del txt de inventario inicial
@@ -202,7 +244,6 @@ namespace RitramaAPP.Clases
                 R.SQL.QUERY_SQL.INVENTARIO.SQL_SELECT_SALIDAS_MASTER,
                 R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_SALIDAS_MASTER, rollid);
         }
-
         public DataTable CargaMovimientoEntradaRollosCortados(string product_id)
         {
             return CommandSqlGenericDtOnePar(R.SQL.DATABASE.NAME,
@@ -216,17 +257,275 @@ namespace RitramaAPP.Clases
                    R.SQL.QUERY_SQL.INVENTARIO.SQL_QUERY_SALIDAS_ROLLOS_CORTADOS_WHERE_PRODUCT_ID,
                    R.ERROR_MESSAGES.INVENTARIO.MESSAGE_CARGAR_SALIDAS_ROLLO_CORTADO, product_id);
         }
-    }
-    public class Item
-    {
-        public string Tipo { get; set; }
-        public string Product_id { get; set; }
-        public string Product_name { get; set; }
-        public decimal Width { get; set; }
-        public decimal Lenght { get; set; }
-        public decimal Msi { get; set; }
-        public string Ubic { get; set; }
-        public string Documento { get; set; }
-        public decimal Cantidad { get; set; }
+        public DataTable GetCustomers()
+        {
+            DataTable dt = new DataTable();
+            using (SqlDataAdapter da = new SqlDataAdapter())
+            {
+                try
+                {
+                    Micomm.Conectar(R.SQL.DATABASE.NAME);
+                    SqlCommand comando = new SqlCommand
+                    {
+                        Connection = Micomm.cnn,
+                        CommandType = CommandType.Text,
+                        CommandText = R.SQL.QUERY_SQL.CUSTOMERS.SQL_SELECT_CUSTOMERS
+                    };
+                    comando.ExecuteNonQuery();
+                    da.SelectCommand = comando;
+                    da.Fill(dt);
+                    comando.Dispose();
+                    Micomm.Desconectar();
+                    return dt;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show(R.ERROR_MESSAGES.CUSTOMERS.MESSAGE_ERROR_GETLISTCUSTOMERS + ex);
+                    return dt;
+                }
+            }
+        }
+        public bool AddReserva(Reserva doc)
+        {
+            try
+            {
+                foreach (string id in doc.items)
+                {
+                    CommandSqlGeneric(R.DATABASES.RITRAMA,
+                    R.SQL.QUERY_SQL.INVENTARIO.SQL_INSERT_DATA_RESERVA,
+                    ParamReserva(doc, id), false, "");
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return false;
+            }
+        }
+        public List<SqlParameter> ParamReserva(Reserva item, string id)
+        {
+            List<SqlParameter> sp = new List<SqlParameter>()
+            {
+                new SqlParameter() {ParameterName = "@p1", SqlDbType = SqlDbType.NVarChar, Value = item.Transac},
+                new SqlParameter() {ParameterName = "@p2", SqlDbType = SqlDbType.NVarChar, Value = item.OrdenTrabajo},
+                new SqlParameter() {ParameterName = "@p3", SqlDbType = SqlDbType.NVarChar, Value = item.OrdenServicio},
+                new SqlParameter() {ParameterName = "@p4", SqlDbType = SqlDbType.DateTime, Value = item.FechaReserva},
+                new SqlParameter() {ParameterName = "@p5", SqlDbType = SqlDbType.DateTime, Value = item.FechaPlan},
+                new SqlParameter() {ParameterName = "@p6", SqlDbType = SqlDbType.NVarChar, Value = item.IdCust},
+                new SqlParameter() {ParameterName = "@p7", SqlDbType = SqlDbType.NVarChar, Value = item.Commentary},
+                new SqlParameter() {ParameterName = "@p8", SqlDbType = SqlDbType.NVarChar, Value = id},
+                new SqlParameter() {ParameterName = "@p9", SqlDbType = SqlDbType.Int, Value = item.IndexProduct}
+            };
+            return sp;
+        }
+        public int GetTransacReserva()
+        {
+            int cant_value;
+            Micomm.Conectar(R.DATABASES.RITRAMA);
+            SqlCommand comando = new SqlCommand
+            {
+                CommandType = CommandType.Text,
+                CommandText = R.SQL.QUERY_SQL.INVENTARIO.SQL_TRANSACT_DATA_RESERVA,
+                Connection = Micomm.cnn
+            };
+            try
+            {
+                cant_value = (int)comando.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_TRANSAC_RESERVAS + ex);
+                cant_value = 0;
+            }
+            Micomm.Desconectar();
+            comando.Dispose();
+            return cant_value;
+        }
+        public void MarkRowReserva(List<String> listid, int type_product)
+        {
+            try
+            {
+                switch (type_product)
+                {
+                    case 0:
+                        // marcar master
+                        SQL_COMMAND_MARK_RESERVA(listid, R.SQL.QUERY_SQL.INVENTARIO.SQL_MARK_RESERVA_MASTER);
+                        break;
+                    case 1:
+                        // marcar hojas
+                        SQL_COMMAND_MARK_RESERVA(listid, R.SQL.QUERY_SQL.INVENTARIO.SQL_MARK_RESERVA_HOJAS);
+                        break;
+                    case 2:
+                        // marcar graphics
+                        SQL_COMMAND_MARK_RESERVA(listid, R.SQL.QUERY_SQL.INVENTARIO.SQL_MARK_RESERVA_GRAF);
+                        break;
+                    case 3:
+                        // marcar graphics
+                        SQL_COMMAND_MARK_RESERVA(listid, R.SQL.QUERY_SQL.INVENTARIO.SQL_MARK_RESERVA_ROLLS);
+                        break;
+                }
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show("error al marcar las reserva de productos" + ex);
+
+            }
+        }
+        public void SQL_COMMAND_MARK_RESERVA(List<String> listaid, string comando)
+        {
+            foreach (string item in listaid)
+            {
+                CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA, comando, "", item);
+            }
+
+        }
+        public bool UnmarkItemReserva(string id,int type_product) 
+        {
+            try
+            {
+                switch (type_product) 
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,
+                        R.SQL.QUERY_SQL.INVENTARIO.SQL_UPDATE_ITEM_UNMARK_RESERVA3, "", id);
+                        break;
+                }
+                
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }        
+        }
+        public Reserva GetInfoDocumReserva(string id)
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                dt = CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,
+                R.SQL.QUERY_SQL.INVENTARIO.SQL_SELECT_INFO_RESERVA,
+                R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_INFO_RESERVAS, id);
+                Reserva documreserva = new Reserva
+                {
+                    Transac = Convert.ToInt16(dt.Rows[0]["transac"]),
+                    OrdenServicio = Convert.ToString(dt.Rows[0]["orden_s"]),
+                    OrdenTrabajo = Convert.ToString(dt.Rows[0]["orden_t"]),
+                    FechaReserva = Convert.ToDateTime(dt.Rows[0]["fecha_reserva"]),
+                    FechaPlan = Convert.ToDateTime(dt.Rows[0]["fecha_entrega"]),
+                    IdCust = Convert.ToString(dt.Rows[0]["id_cust"]),
+                    Customer_Name = Convert.ToString(dt.Rows[0]["customer_name"]),
+                    Commentary = Convert.ToString(dt.Rows[0]["commentary"])
+                };
+                return documreserva;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("error al traer los datos de la reserva de productos");
+                return null;
+            }
+        }
+        public Boolean DeleteRenglonReserva(string id)
+        {
+            try
+            {
+                CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,
+                    R.SQL.QUERY_SQL.INVENTARIO.SQL_DELETE_ITEM_RESERVA,
+                    R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_DELETE_ITEM_RESERVAS, id);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+
+            }
+        }
+        public Boolean DeleteDocumentReserva(string doc) 
+        {
+            try
+            {
+                //crear los objetos a utilizar
+                List<string> ids = new List<string>();
+                DataTable dt = new DataTable();
+                //traer los codigos id desde la tabla de reserva
+                dt = CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,
+                R.SQL.QUERY_SQL.INVENTARIO.SQL_LIST_ID_ITEM_RESERVA,
+                R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_DELETE_DOCUMENT_RESERVAS,doc);
+                //convertirlos a lista
+                ids = dt.AsEnumerable()
+                      .Select(r => r.Field<string>("id"))
+                      .ToList();
+                //recorrer la lista y ejecutar comando sql para desmarcalos
+                foreach (string item in ids) 
+                {
+                    CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,
+                    R.SQL.QUERY_SQL.INVENTARIO.SQL_UPDATE_ITEM_UNMARK_RESERVA3,
+                    R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_DELETE_DOCUMENT_RESERVAS,item);
+                }
+                //borra el documento de la tabla de reserva.
+                CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,
+                R.SQL.QUERY_SQL.INVENTARIO.SQL_DELETE_DOCUMENT_RESERVA,
+                R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_DELETE_DOCUMENT_RESERVAS, doc);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        public Item GetDataRollofromRC(string rc) 
+        {
+            //procedimento para buscar los datos de los rollos desde RC
+            DataTable dt = new DataTable();
+            try
+            {
+                dt = CommandSqlGenericDtOnePar(R.DATABASES.RITRAMA,R.SQL.QUERY_SQL.INVENTARIO.SQL_GETDATA_ROLLS_FROMRC,"",rc);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error al traer la informacion de los rollos para cambiar las ubicaiones");
+            }
+            Item item = new Item
+            {
+                Product_id = dt.Rows[0]["product_id"].ToString(),
+                Product_name = dt.Rows[0]["product_name"].ToString(),
+                Width = Convert.ToDecimal(dt.Rows[0]["width"]),
+                Lenght = Convert.ToDecimal(dt.Rows[0]["large"]),
+                Msi = Convert.ToDecimal(dt.Rows[0]["msi"]),
+                Tipo = dt.Rows[0]["tipo"].ToString()
+            };
+            return item;
+        }
+        public bool SetDataUbicationToAlmacenFromRC(string tipo, string ubicacion, string rc) 
+        {
+            //procedimiento para guardar en base de datos la ubicacion desde el RC
+            try
+            {
+                switch (tipo) 
+                {
+                    case "I":
+                        CommandSqlGenericTreeParameters(R.DATABASES.RITRAMA,
+                        R.SQL.QUERY_SQL.INVENTARIO.SQL_UPDATE_UBICATION_ROLLS_INIC, rc, ubicacion, "", false, "", 0);
+                        break;
+                    case "M":
+                        CommandSqlGenericTreeParameters(R.DATABASES.RITRAMA,
+                        R.SQL.QUERY_SQL.INVENTARIO.SQL_UPDATE_UBICATION_ROLLS_ORDEN, rc, ubicacion, "", false, "", 0);
+                        break;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(R.ERROR_MESSAGES.INVENTARIO.MESSAGE_ERROR_UBICATION_FROMRC);
+                return false;       
+            }
+        }
     }
 }

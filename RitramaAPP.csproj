@@ -64,7 +64,8 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>DataBaseApp.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.3500.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -90,12 +91,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clases\AurorizeDocOc.cs" />
     <Compile Include="Clases\ClassCustomer.cs" />
     <Compile Include="Clases\ClassDespacho.cs" />
     <Compile Include="Clases\ClassDevolucion.cs" />
     <Compile Include="Clases\ClassItemsPedidos.cs" />
     <Compile Include="Clases\DespachosManager.cs" />
+    <Compile Include="Clases\DevolucionManager.cs" />
     <Compile Include="Clases\InventarioManager.cs" />
+    <Compile Include="Clases\Item.cs" />
     <Compile Include="Clases\Items_despacho.cs" />
     <Compile Include="Clases\Item_Devol.cs" />
     <Compile Include="Clases\Orden.cs" />
@@ -105,9 +109,12 @@
     <Compile Include="Clases\ConfigManager.cs" />
     <Compile Include="Clases\CustomerManager.cs" />
     <Compile Include="Clases\Orden_Items.cs" />
+    <Compile Include="Clases\Paleta.cs" />
     <Compile Include="Clases\ProduccionManager.cs" />
     <Compile Include="Clases\ProductsManager.cs" />
     <Compile Include="Clases\RecepcionManager.cs" />
+    <Compile Include="Clases\ReportsManager.cs" />
+    <Compile Include="Clases\Reserva.cs" />
     <Compile Include="Clases\Roll_Details.cs" />
     <Compile Include="Clases\SupplyManager.cs" />
     <Compile Include="CrystalReport1.cs">
@@ -134,6 +141,12 @@
     <Compile Include="form\frmBuscarRollid.Designer.cs">
       <DependentUpon>frmBuscarRollid.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\frmContentPalet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\frmContentPalet.Designer.cs">
+      <DependentUpon>frmContentPalet.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmDespacho.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,11 +159,23 @@
     <Compile Include="form\FrmDevol.Designer.cs">
       <DependentUpon>FrmDevol.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\frmGetOneValue.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\frmGetOneValue.Designer.cs">
+      <DependentUpon>frmGetOneValue.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmImportExcelMP.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="form\FrmImportExcelMP.Designer.cs">
       <DependentUpon>FrmImportExcelMP.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\frmInfoReserva.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\frmInfoReserva.Designer.cs">
+      <DependentUpon>frmInfoReserva.cs</DependentUpon>
     </Compile>
     <Compile Include="form\FrmMovimInventario.cs">
       <SubType>Form</SubType>
@@ -158,17 +183,41 @@
     <Compile Include="form\FrmMovimInventario.Designer.cs">
       <DependentUpon>FrmMovimInventario.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmPrintSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmPrintSelect.Designer.cs">
+      <DependentUpon>FrmPrintSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\FrmReportViewCrystal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="form\FrmReportViewCrystal.Designer.cs">
       <DependentUpon>FrmReportViewCrystal.cs</DependentUpon>
     </Compile>
+    <Compile Include="form\FrmReservas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmReservas.Designer.cs">
+      <DependentUpon>FrmReservas.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmSaveOc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmSaveOc.Designer.cs">
+      <DependentUpon>FrmSaveOc.cs</DependentUpon>
+    </Compile>
     <Compile Include="form\frmSincroRecepciones.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="form\frmSincroRecepciones.Designer.cs">
       <DependentUpon>frmSincroRecepciones.cs</DependentUpon>
+    </Compile>
+    <Compile Include="form\FrmUbicacionesAlmacen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form\FrmUbicacionesAlmacen.Designer.cs">
+      <DependentUpon>FrmUbicacionesAlmacen.cs</DependentUpon>
     </Compile>
     <Compile Include="form\PickingList.cs">
       <SubType>Form</SubType>
@@ -303,23 +352,44 @@
     <EmbeddedResource Include="form\frmBuscarRollid.resx">
       <DependentUpon>frmBuscarRollid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\frmContentPalet.resx">
+      <DependentUpon>frmContentPalet.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmDespacho.resx">
       <DependentUpon>FrmDespacho.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmDevol.resx">
       <DependentUpon>FrmDevol.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\frmGetOneValue.resx">
+      <DependentUpon>frmGetOneValue.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmImportExcelMP.resx">
       <DependentUpon>FrmImportExcelMP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\frmInfoReserva.resx">
+      <DependentUpon>frmInfoReserva.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\FrmMovimInventario.resx">
       <DependentUpon>FrmMovimInventario.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmPrintSelect.resx">
+      <DependentUpon>FrmPrintSelect.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\FrmReportViewCrystal.resx">
       <DependentUpon>FrmReportViewCrystal.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmReservas.resx">
+      <DependentUpon>FrmReservas.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmSaveOc.resx">
+      <DependentUpon>FrmSaveOc.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="form\frmSincroRecepciones.resx">
       <DependentUpon>frmSincroRecepciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form\FrmUbicacionesAlmacen.resx">
+      <DependentUpon>FrmUbicacionesAlmacen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form\PickingList.resx">
       <DependentUpon>PickingList.cs</DependentUpon>
@@ -447,6 +517,10 @@
   <ItemGroup>
     <Content Include="DataBaseApp.ico" />
     <Content Include="images\BUSCAR.ico" />
+    <Content Include="images\action.ico" />
+    <None Include="images\key-icon.png" />
+    <None Include="Resources\red_flag.png" />
+    <None Include="Resources\red_flag.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

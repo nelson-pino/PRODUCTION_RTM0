@@ -154,9 +154,9 @@ namespace RitramaAPP
         private void BOT_BUSCAR_Click(object sender, EventArgs e)
         {
             SeleccionCustomers BrowseCustomers = new SeleccionCustomers();
-            BrowseCustomers.dtcustomer = ds.Tables["dtcustomer"];
+            BrowseCustomers.Dtcustomer = ds.Tables["dtcustomer"];
             BrowseCustomers.ShowDialog();
-            int itemFound = bs.Find("Customer_ID", BrowseCustomers.itemSelected);
+            int itemFound = bs.Find("Customer_ID", BrowseCustomers.ItemSelected);
             bs.Position = itemFound;
         }
         private void OpcionesMenu(int states)

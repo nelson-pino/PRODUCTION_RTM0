@@ -39,9 +39,7 @@
             this.bot_nuevo = new System.Windows.Forms.ToolStripButton();
             this.bot_cancelar = new System.Windows.Forms.ToolStripButton();
             this.bot_grabar = new System.Windows.Forms.ToolStripButton();
-            this.bot_buscar = new System.Windows.Forms.ToolStripButton();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.TXT_NUMERO = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.TXT_FECHA = new System.Windows.Forms.DateTimePicker();
@@ -53,12 +51,16 @@
             this.TXT_CUSTOMER_NAME = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.GridDevol = new System.Windows.Forms.DataGridView();
-            this.RA_DOC_ANUL = new System.Windows.Forms.RadioButton();
-            this.AGREGAR_RENGLON = new System.Windows.Forms.Button();
-            this.DELETE_RENGLON = new System.Windows.Forms.Button();
+            this.RA_DOCUMENT_STATUS = new System.Windows.Forms.RadioButton();
+            this.BTN_AGREGAR_RENGLON = new System.Windows.Forms.Button();
+            this.BTN_DELETE_RENGLON = new System.Windows.Forms.Button();
+            this.REGISTER_COUNT = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.toolsbar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridDevol)).BeginInit();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -70,15 +72,14 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 82);
+            this.panel1.Size = new System.Drawing.Size(862, 82);
             this.panel1.TabIndex = 34;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // label15
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(323, 27);
+            this.label15.Location = new System.Drawing.Point(266, 26);
             this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(231, 31);
@@ -95,11 +96,10 @@
             this.bot_ultimo,
             this.bot_nuevo,
             this.bot_cancelar,
-            this.bot_grabar,
-            this.bot_buscar});
+            this.bot_grabar});
             this.toolsbar.Location = new System.Drawing.Point(0, 82);
             this.toolsbar.Name = "toolsbar";
-            this.toolsbar.Size = new System.Drawing.Size(800, 27);
+            this.toolsbar.Size = new System.Drawing.Size(862, 27);
             this.toolsbar.TabIndex = 36;
             this.toolsbar.Text = "toolStrip1";
             // 
@@ -111,6 +111,7 @@
             this.bot_primero.Name = "bot_primero";
             this.bot_primero.Size = new System.Drawing.Size(80, 24);
             this.bot_primero.Text = "Primero";
+            this.bot_primero.Click += new System.EventHandler(this.Bot_primero_Click);
             // 
             // bot_anterior
             // 
@@ -120,6 +121,7 @@
             this.bot_anterior.Name = "bot_anterior";
             this.bot_anterior.Size = new System.Drawing.Size(80, 24);
             this.bot_anterior.Text = "Anterior";
+            this.bot_anterior.Click += new System.EventHandler(this.Bot_anterior_Click);
             // 
             // bot_siguiente
             // 
@@ -129,6 +131,7 @@
             this.bot_siguiente.Name = "bot_siguiente";
             this.bot_siguiente.Size = new System.Drawing.Size(80, 24);
             this.bot_siguiente.Text = "Siguie";
+            this.bot_siguiente.Click += new System.EventHandler(this.Bot_siguiente_Click);
             // 
             // bot_ultimo
             // 
@@ -138,6 +141,7 @@
             this.bot_ultimo.Name = "bot_ultimo";
             this.bot_ultimo.Size = new System.Drawing.Size(80, 24);
             this.bot_ultimo.Text = "Ultim";
+            this.bot_ultimo.Click += new System.EventHandler(this.Bot_ultimo_Click);
             // 
             // bot_nuevo
             // 
@@ -147,7 +151,7 @@
             this.bot_nuevo.Name = "bot_nuevo";
             this.bot_nuevo.Size = new System.Drawing.Size(80, 24);
             this.bot_nuevo.Text = "Nuevo";
-            this.bot_nuevo.Click += new System.EventHandler(this.bot_nuevo_Click);
+            this.bot_nuevo.Click += new System.EventHandler(this.Bot_nuevo_Click);
             // 
             // bot_cancelar
             // 
@@ -158,6 +162,7 @@
             this.bot_cancelar.Name = "bot_cancelar";
             this.bot_cancelar.Size = new System.Drawing.Size(80, 24);
             this.bot_cancelar.Text = "Cancel";
+            this.bot_cancelar.Click += new System.EventHandler(this.Bot_cancelar_Click);
             // 
             // bot_grabar
             // 
@@ -168,35 +173,21 @@
             this.bot_grabar.Name = "bot_grabar";
             this.bot_grabar.Size = new System.Drawing.Size(80, 24);
             this.bot_grabar.Text = "Grabar";
-            // 
-            // bot_buscar
-            // 
-            this.bot_buscar.AutoSize = false;
-            this.bot_buscar.Image = ((System.Drawing.Image)(resources.GetObject("bot_buscar.Image")));
-            this.bot_buscar.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bot_buscar.Name = "bot_buscar";
-            this.bot_buscar.Size = new System.Drawing.Size(80, 24);
-            this.bot_buscar.Text = "Buscar";
+            this.bot_grabar.Click += new System.EventHandler(this.Bot_grabar_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 140);
+            this.label1.Location = new System.Drawing.Point(4, 35);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 37;
             this.label1.Text = "Numero Doc:";
             // 
-            // textBox1
-            // 
-            this.textBox1.Location = new System.Drawing.Point(-15, -15);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 38;
-            // 
             // TXT_NUMERO
             // 
-            this.TXT_NUMERO.Location = new System.Drawing.Point(89, 137);
+            this.TXT_NUMERO.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TXT_NUMERO.Location = new System.Drawing.Point(80, 32);
             this.TXT_NUMERO.Name = "TXT_NUMERO";
             this.TXT_NUMERO.ReadOnly = true;
             this.TXT_NUMERO.Size = new System.Drawing.Size(100, 20);
@@ -205,7 +196,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(207, 140);
+            this.label2.Location = new System.Drawing.Point(198, 35);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(85, 13);
             this.label2.TabIndex = 40;
@@ -214,23 +205,24 @@
             // TXT_FECHA
             // 
             this.TXT_FECHA.Enabled = false;
-            this.TXT_FECHA.Location = new System.Drawing.Point(298, 137);
+            this.TXT_FECHA.Location = new System.Drawing.Point(359, 32);
             this.TXT_FECHA.Name = "TXT_FECHA";
             this.TXT_FECHA.Size = new System.Drawing.Size(200, 20);
             this.TXT_FECHA.TabIndex = 41;
             // 
             // TXT_RAZON_DEVOL
             // 
-            this.TXT_RAZON_DEVOL.Location = new System.Drawing.Point(89, 189);
+            this.TXT_RAZON_DEVOL.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TXT_RAZON_DEVOL.Location = new System.Drawing.Point(80, 84);
             this.TXT_RAZON_DEVOL.Name = "TXT_RAZON_DEVOL";
             this.TXT_RAZON_DEVOL.ReadOnly = true;
-            this.TXT_RAZON_DEVOL.Size = new System.Drawing.Size(409, 20);
+            this.TXT_RAZON_DEVOL.Size = new System.Drawing.Size(479, 20);
             this.TXT_RAZON_DEVOL.TabIndex = 43;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(39, 192);
+            this.label3.Location = new System.Drawing.Point(30, 87);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(44, 13);
             this.label3.TabIndex = 42;
@@ -238,7 +230,8 @@
             // 
             // TXT_IDCUST
             // 
-            this.TXT_IDCUST.Location = new System.Drawing.Point(89, 163);
+            this.TXT_IDCUST.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TXT_IDCUST.Location = new System.Drawing.Point(80, 58);
             this.TXT_IDCUST.Name = "TXT_IDCUST";
             this.TXT_IDCUST.ReadOnly = true;
             this.TXT_IDCUST.Size = new System.Drawing.Size(57, 20);
@@ -247,7 +240,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(39, 166);
+            this.label4.Location = new System.Drawing.Point(30, 61);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(46, 13);
             this.label4.TabIndex = 44;
@@ -255,26 +248,28 @@
             // 
             // btn_search
             // 
-            this.btn_search.Location = new System.Drawing.Point(152, 163);
+            this.btn_search.Enabled = false;
+            this.btn_search.Location = new System.Drawing.Point(143, 58);
             this.btn_search.Name = "btn_search";
             this.btn_search.Size = new System.Drawing.Size(37, 23);
             this.btn_search.TabIndex = 46;
             this.btn_search.Text = "...";
             this.btn_search.UseVisualStyleBackColor = true;
-            this.btn_search.Click += new System.EventHandler(this.btn_search_Click);
+            this.btn_search.Click += new System.EventHandler(this.Btn_search_Click);
             // 
             // TXT_CUSTOMER_NAME
             // 
-            this.TXT_CUSTOMER_NAME.Location = new System.Drawing.Point(298, 163);
+            this.TXT_CUSTOMER_NAME.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TXT_CUSTOMER_NAME.Location = new System.Drawing.Point(249, 58);
             this.TXT_CUSTOMER_NAME.Name = "TXT_CUSTOMER_NAME";
             this.TXT_CUSTOMER_NAME.ReadOnly = true;
-            this.TXT_CUSTOMER_NAME.Size = new System.Drawing.Size(200, 20);
+            this.TXT_CUSTOMER_NAME.Size = new System.Drawing.Size(310, 20);
             this.TXT_CUSTOMER_NAME.TabIndex = 47;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(207, 166);
+            this.label5.Location = new System.Drawing.Point(198, 61);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(45, 13);
             this.label5.TabIndex = 48;
@@ -282,63 +277,109 @@
             // 
             // GridDevol
             // 
+            this.GridDevol.AllowUserToAddRows = false;
+            this.GridDevol.AllowUserToDeleteRows = false;
+            this.GridDevol.AllowUserToResizeRows = false;
             this.GridDevol.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.GridDevol.Location = new System.Drawing.Point(16, 226);
+            this.GridDevol.Location = new System.Drawing.Point(9, 267);
             this.GridDevol.Name = "GridDevol";
-            this.GridDevol.Size = new System.Drawing.Size(482, 212);
+            this.GridDevol.ReadOnly = true;
+            this.GridDevol.RowHeadersWidth = 35;
+            this.GridDevol.Size = new System.Drawing.Size(724, 192);
             this.GridDevol.TabIndex = 49;
+            this.GridDevol.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDevol_CellContentClick);
+            this.GridDevol.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.GridDevol_CellEndEdit);
             // 
-            // RA_DOC_ANUL
+            // RA_DOCUMENT_STATUS
             // 
-            this.RA_DOC_ANUL.AutoSize = true;
-            this.RA_DOC_ANUL.Location = new System.Drawing.Point(16, 461);
-            this.RA_DOC_ANUL.Name = "RA_DOC_ANUL";
-            this.RA_DOC_ANUL.Size = new System.Drawing.Size(122, 17);
-            this.RA_DOC_ANUL.TabIndex = 50;
-            this.RA_DOC_ANUL.TabStop = true;
-            this.RA_DOC_ANUL.Text = "Documento Anulado";
-            this.RA_DOC_ANUL.UseVisualStyleBackColor = true;
-            this.RA_DOC_ANUL.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.RA_DOCUMENT_STATUS.AutoSize = true;
+            this.RA_DOCUMENT_STATUS.Enabled = false;
+            this.RA_DOCUMENT_STATUS.Location = new System.Drawing.Point(16, 461);
+            this.RA_DOCUMENT_STATUS.Name = "RA_DOCUMENT_STATUS";
+            this.RA_DOCUMENT_STATUS.Size = new System.Drawing.Size(122, 17);
+            this.RA_DOCUMENT_STATUS.TabIndex = 50;
+            this.RA_DOCUMENT_STATUS.TabStop = true;
+            this.RA_DOCUMENT_STATUS.Text = "Documento Anulado";
+            this.RA_DOCUMENT_STATUS.UseVisualStyleBackColor = true;
             // 
-            // AGREGAR_RENGLON
+            // BTN_AGREGAR_RENGLON
             // 
-            this.AGREGAR_RENGLON.Location = new System.Drawing.Point(504, 226);
-            this.AGREGAR_RENGLON.Name = "AGREGAR_RENGLON";
-            this.AGREGAR_RENGLON.Size = new System.Drawing.Size(75, 23);
-            this.AGREGAR_RENGLON.TabIndex = 51;
-            this.AGREGAR_RENGLON.Text = "Agregar ";
-            this.AGREGAR_RENGLON.UseVisualStyleBackColor = true;
+            this.BTN_AGREGAR_RENGLON.Enabled = false;
+            this.BTN_AGREGAR_RENGLON.Image = ((System.Drawing.Image)(resources.GetObject("BTN_AGREGAR_RENGLON.Image")));
+            this.BTN_AGREGAR_RENGLON.Location = new System.Drawing.Point(739, 267);
+            this.BTN_AGREGAR_RENGLON.Name = "BTN_AGREGAR_RENGLON";
+            this.BTN_AGREGAR_RENGLON.Size = new System.Drawing.Size(111, 60);
+            this.BTN_AGREGAR_RENGLON.TabIndex = 51;
+            this.BTN_AGREGAR_RENGLON.Text = "Agregar ";
+            this.BTN_AGREGAR_RENGLON.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.BTN_AGREGAR_RENGLON.UseVisualStyleBackColor = true;
+            this.BTN_AGREGAR_RENGLON.Click += new System.EventHandler(this.AGREGAR_RENGLON_Click);
             // 
-            // DELETE_RENGLON
+            // BTN_DELETE_RENGLON
             // 
-            this.DELETE_RENGLON.Location = new System.Drawing.Point(504, 255);
-            this.DELETE_RENGLON.Name = "DELETE_RENGLON";
-            this.DELETE_RENGLON.Size = new System.Drawing.Size(75, 23);
-            this.DELETE_RENGLON.TabIndex = 52;
-            this.DELETE_RENGLON.Text = "Eliminar";
-            this.DELETE_RENGLON.UseVisualStyleBackColor = true;
+            this.BTN_DELETE_RENGLON.Enabled = false;
+            this.BTN_DELETE_RENGLON.Image = ((System.Drawing.Image)(resources.GetObject("BTN_DELETE_RENGLON.Image")));
+            this.BTN_DELETE_RENGLON.Location = new System.Drawing.Point(739, 333);
+            this.BTN_DELETE_RENGLON.Name = "BTN_DELETE_RENGLON";
+            this.BTN_DELETE_RENGLON.Size = new System.Drawing.Size(111, 60);
+            this.BTN_DELETE_RENGLON.TabIndex = 52;
+            this.BTN_DELETE_RENGLON.Text = "Eliminar";
+            this.BTN_DELETE_RENGLON.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.BTN_DELETE_RENGLON.UseVisualStyleBackColor = true;
+            this.BTN_DELETE_RENGLON.Click += new System.EventHandler(this.BTN_DELETE_RENGLON_Click);
+            // 
+            // REGISTER_COUNT
+            // 
+            this.REGISTER_COUNT.AutoSize = true;
+            this.REGISTER_COUNT.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.REGISTER_COUNT.Location = new System.Drawing.Point(463, 465);
+            this.REGISTER_COUNT.Name = "REGISTER_COUNT";
+            this.REGISTER_COUNT.Size = new System.Drawing.Size(114, 13);
+            this.REGISTER_COUNT.TabIndex = 53;
+            this.REGISTER_COUNT.Text = "REGISTRO 0 DE 0";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.TXT_FECHA);
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.TXT_NUMERO);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.label3);
+            this.groupBox1.Controls.Add(this.TXT_RAZON_DEVOL);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.TXT_CUSTOMER_NAME);
+            this.groupBox1.Controls.Add(this.TXT_IDCUST);
+            this.groupBox1.Controls.Add(this.btn_search);
+            this.groupBox1.Location = new System.Drawing.Point(9, 112);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(568, 137);
+            this.groupBox1.TabIndex = 54;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Encabezado de la Devolución";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(13, 252);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(133, 13);
+            this.label6.TabIndex = 55;
+            this.label6.Text = "Detalle de Devolución";
             // 
             // FrmDevol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 510);
-            this.Controls.Add(this.DELETE_RENGLON);
-            this.Controls.Add(this.AGREGAR_RENGLON);
-            this.Controls.Add(this.RA_DOC_ANUL);
+            this.ClientSize = new System.Drawing.Size(862, 510);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.REGISTER_COUNT);
+            this.Controls.Add(this.BTN_DELETE_RENGLON);
+            this.Controls.Add(this.BTN_AGREGAR_RENGLON);
+            this.Controls.Add(this.RA_DOCUMENT_STATUS);
             this.Controls.Add(this.GridDevol);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.TXT_CUSTOMER_NAME);
-            this.Controls.Add(this.btn_search);
-            this.Controls.Add(this.TXT_IDCUST);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.TXT_RAZON_DEVOL);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.TXT_FECHA);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.TXT_NUMERO);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.toolsbar);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -350,6 +391,8 @@
             this.toolsbar.ResumeLayout(false);
             this.toolsbar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.GridDevol)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -367,9 +410,7 @@
         private System.Windows.Forms.ToolStripButton bot_nuevo;
         private System.Windows.Forms.ToolStripButton bot_cancelar;
         private System.Windows.Forms.ToolStripButton bot_grabar;
-        private System.Windows.Forms.ToolStripButton bot_buscar;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox TXT_NUMERO;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DateTimePicker TXT_FECHA;
@@ -381,8 +422,11 @@
         private System.Windows.Forms.TextBox TXT_CUSTOMER_NAME;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.DataGridView GridDevol;
-        private System.Windows.Forms.RadioButton RA_DOC_ANUL;
-        private System.Windows.Forms.Button AGREGAR_RENGLON;
-        private System.Windows.Forms.Button DELETE_RENGLON;
+        private System.Windows.Forms.RadioButton RA_DOCUMENT_STATUS;
+        private System.Windows.Forms.Button BTN_AGREGAR_RENGLON;
+        private System.Windows.Forms.Button BTN_DELETE_RENGLON;
+        private System.Windows.Forms.Label REGISTER_COUNT;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label6;
     }
 }

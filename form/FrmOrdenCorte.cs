@@ -7,9 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DataTable = System.Data.DataTable;
 
@@ -30,7 +32,8 @@ namespace RitramaAPP
         private DataRowView ParentRow;
         int EditMode = 0;
         //Boolean ischanged_rollos;
-        string rollid1_tipomov, rollid2_tipomov;
+        string rollid1_tipomov = string.Empty;
+        string rollid2_tipomov = string.Empty;
         string modproduct_id;
         Orden orden;
         public static List<Corte> listacorte;
@@ -40,14 +43,34 @@ namespace RitramaAPP
         private void FrmOrdenCorte_Load(object sender, EventArgs e)
         {
             AplicarEstilosGridRollos();
+            AplicarEstilosGridCortes();
             ds = managerorden.ds;
             bs.DataSource = ds;
             bs.DataMember = "dtordenes";
+            bs.Sort = "numero DESC";
             DataBinding();
             //binding del detalle
             bsdetalle.DataSource = bs;
             bsdetalle.DataMember = "FK_ORDEN_DETAILS";
             grid_rollos.DataSource = bsdetalle;
+            VERIFICAR_DOCUMENTO();
+            RefrescarStepIndicator();
+        }
+        private void RefrescarStepIndicator() 
+        {
+            int step;
+            if (string.IsNullOrEmpty(TXT_STEP_DOCUMENT.Text))
+            {
+                step = 0;
+            }
+            else
+            {
+                step = Convert.ToInt16(TXT_STEP_DOCUMENT.Text);
+            }
+            Update_StepIndicator(step);
+        }
+        private void AplicarEstilosGridCortes() 
+        {
             grid_cortes.AutoGenerateColumns = false;
             AGREGAR_COLUMN_GRID("num", 25, "It.", "Num", grid_cortes);
             AGREGAR_COLUMN_GRID("width", 45, "Width", "width", grid_cortes);
@@ -56,9 +79,66 @@ namespace RitramaAPP
             grid_cortes.Columns["num"].ReadOnly = true;
             grid_cortes.Columns["lenght"].ReadOnly = true;
             grid_cortes.Columns["msi"].ReadOnly = true;
-            VERIFICAR_DOCUMENTO();
 
         }
+        private void Update_StepIndicator(int step) 
+        {
+            switch (step) 
+            {
+                case 1:
+                    LABEL_STATE.Text = R.CONSTANTES.DOCUMENT_OC_STEP1;
+                    PictureStep1.BackColor = Color.FromArgb(102, 255, 51);
+                    PictureStep2.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep3.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep4.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep4.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep5.BackColor = Color.FromArgb(224, 224, 224);
+                    break;
+                case 2:
+                    LABEL_STATE.Text = R.CONSTANTES.DOCUMENT_OC_STEP2;
+                    PictureStep1.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep2.BackColor = Color.FromArgb(102, 255, 51);
+                    PictureStep3.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep4.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep4.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep5.BackColor = Color.FromArgb(224, 224, 224);
+                    break;
+                case 3:
+                    LABEL_STATE.Text = R.CONSTANTES.DOCUMENT_OC_STEP3;
+                    PictureStep1.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep2.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep3.BackColor = Color.FromArgb(102, 255, 51);
+                    PictureStep4.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep4.BackColor = Color.FromArgb(224, 224, 224);
+                    PictureStep5.BackColor = Color.FromArgb(224, 224, 224);
+                    break;
+                case 4:
+                    LABEL_STATE.Text = R.CONSTANTES.DOCUMENT_OC_STEP4;
+                    PictureStep1.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep2.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep3.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep4.BackColor = Color.FromArgb(102, 255, 51);
+                    PictureStep5.BackColor = Color.FromArgb(224, 224, 224);
+                    break;
+                case 5:
+                    LABEL_STATE.Text = R.CONSTANTES.DOCUMENT_OC_STEP5;
+                    PictureStep1.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep2.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep3.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep4.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep5.BackColor = Color.FromArgb(102, 255, 51);
+                    break;
+                default:
+                    PictureStep1.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep2.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep3.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep4.BackColor = Color.FromArgb(51, 51, 0);
+                    PictureStep5.BackColor = Color.FromArgb(51, 51, 0);
+                    LABEL_STATE.Text = R.CONSTANTES.DOCUMENT_OC_STEP0;
+                    break;
+            }
+        }
+
 
         #region ENLACE_DATOS
         private void DataBinding()
@@ -74,7 +154,7 @@ namespace RitramaAPP
             txt_lenght2_rollid.DataBindings.Add("text", bs, "lenght_2");
             txt_product_id.DataBindings.Add("text", bs, "product_id");
             txt_product_name.DataBindings.Add("text", bs, "product_name");
-            chk_process.DataBindings.Add("Checked", bs, "procesado");
+            //chk_process.DataBindings.Add("Checked", bs, "procesado");
             chk_anulado.DataBindings.Add("Checked", bs, "anulada");
             txt_cort_total_ancho.DataBindings.Add("text", bs, "tot_inch_ancho");
             txt_cort_long_cortar.DataBindings.Add("text", bs, "longitud_cortar");
@@ -95,14 +175,14 @@ namespace RitramaAPP
             txt_lenght_u2.DataBindings.Add("text", bs, "util2_real_lenght");
             txt_cort_largo2.DataBindings.Add("text", bs, "cortes_largo2");
             txt_cort_rollos_cortar2.DataBindings.Add("text", bs, "cant_rollos2");
-
+            TXT_STEP_DOCUMENT.DataBindings.Add("text", bs, "step");
         }
         #endregion
 
         #region FUNCTIONS
         private void ToSaveAdd()
         {
-            if (managerorden.OrderExiste(txt_numero_oc.Text))
+            if (managerorden.OrderExiste(Convert.ToInt16(txt_numero_oc.Text)))
             {
                 MessageBox.Show("La Orden produccion : " + txt_numero_oc.Text + " ya existe.");
                 txt_numero_oc.Text = "";
@@ -136,24 +216,39 @@ namespace RitramaAPP
                 return;
             }
             //llenar el encabezado de la orden de produccion
-            managerorden.Add(CrearObjectOrden(), false);
-            if (chk_rebobinado.Checked == false)
-            {
-                UPDATE_INVENTARIO_MASTER();
-            }
-            else
-            {
-                UPDATE_INVENTARIO_REBO();
-            }
-
-
-            chk_process.DataBindings.Add("Checked", bs, "procesado");
+            managerorden.Add(CrearObjectOrden(1), false);
+            
+            //chk_process.DataBindings.Add("Checked", bs, "procesado");
             chk_anulado.DataBindings.Add("Checked", bs, "anulada");
+            //actualizar la interfaz grafica.
+            DataRowView filaActual;
+            filaActual = (DataRowView)bs.Current;
+            filaActual["step"] = 1;
+            bs.EndEdit();
+
+            //marcar los master-rollid como cargado en documentos.
+            managerorden.MarkMasterRollidLoadDocument(orden.Tipo_Mov1,orden.Rollid_1,orden.Numero);   
+
+
             OptionsMenu(1);
             OptionsForm(1);
             EditMode = 0;
+            Update_StepIndicator(1);
         }
-        private void UPDATE_INVENTARIO_REBO()
+        private void RUN_INVENTARIO() 
+        {
+            
+            Orden orden = CrearObjectOrden(0);
+            if (chk_rebobinado.Checked == false)
+            {
+                UPDATE_INVENTARIO_MASTER(orden);
+            }
+            else
+            {
+                UPDATE_INVENTARIO_REBO(orden);
+            }
+        }
+        private void UPDATE_INVENTARIO_REBO(Orden orden)
         {
             if (Convert.ToDouble(txt_lenght1_r.Text) > 0)
             {
@@ -167,7 +262,7 @@ namespace RitramaAPP
                 managerorden.UpdateUniqueCode(orden.Rollid_1);
             }
         }
-        private void UPDATE_INVENTARIO_MASTER()
+        private void UPDATE_INVENTARIO_MASTER(Orden orden)
         {
             Boolean MasterEmpty = false;
             //comprobar que hay master remanente master 1.
@@ -213,11 +308,16 @@ namespace RitramaAPP
         }
         private void ToSaveUpdate()
         {
-            managerorden.Update_Only(CrearObjectOrden(), false);
+            managerorden.Update_Only(CrearObjectOrden(2), false);
+            //Actualizar la Interfaz Grafica
+            DataRowView rowcurrent;
+            rowcurrent = (DataRowView)bs.Current;
+            rowcurrent["step"] = 2;
+            bs.EndEdit();
             EditMode = 0;
-            //ischanged_rollos = false;
             OptionsMenu(1);
             OptionsForm(1);
+            Update_StepIndicator(2);
         }
         private void CargarRollIDNumber(int state)
         {
@@ -229,8 +329,16 @@ namespace RitramaAPP
 
                 if (state == 0)
                 {
+                    //Validar si el master esta montado en otro documento.
+                    if (managerorden.CheckMasterDocumentOc(rollid.GetrollId)) 
+                    {
+                        MessageBox.Show("El roll-id que acaba se seleccionar esta montada en otra orden de corte.");
+                        return;
+                    }
                     ROLLID_A = new Roll_Details
                     {
+                    
+
                         Product_id = rollid.Getproduct_id,
                         Product_name = rollid.GetProduct_name,
                         Roll_id = rollid.GetrollId,
@@ -247,7 +355,7 @@ namespace RitramaAPP
                     rollid1_tipomov = ROLLID_A.Tipo_mov;
 
                     //verificar si es rebobinado.
-                    if (rollid.rebobinado == true)
+                    if (rollid.Rebobinado == true)
                     {
                         chk_rebobinado.Checked = true;
                     }
@@ -258,6 +366,12 @@ namespace RitramaAPP
                 }
                 else
                 {
+                    //Validar si el master esta montado en otro documento.
+                    if (managerorden.CheckMasterDocumentOc(rollid.GetrollId))
+                    {
+                        MessageBox.Show("El roll-id que acaba se seleccionar esta montada en otra orden de corte.");
+                        return;
+                    }
                     ROLLID_B = new Roll_Details
                     {
                         Product_id = rollid.Getproduct_id,
@@ -419,30 +533,47 @@ namespace RitramaAPP
         }
         private void VERIFICAR_DOCUMENTO()
         {
-            if (chk_process.Checked || chk_anulado.Checked)
+            if (bs.Count == 0) 
             {
-                DOCUMENTO_CERRADO();
+                return;
             }
-            else
-            {
-                DOCUMENTO_ABIERTO();
-            }
+
             //buscar los datos de los cortes de la orden.
             grid_cortes.DataSource = managerorden.CargarDataCortes(txt_numero_oc.Text.Trim());
+            // verificar documentos cerrados
+            DataRowView RowCurrent = (DataRowView)bs.Current;
+            if (RowCurrent["step"].ToString() == "5" || Convert.ToBoolean(RowCurrent["anulada"]) == true) 
+            {
+                NO_ACTIONS();
+            }
+            else 
+            {
+                ACTIONS_ENABLED();
+            }
+            if (Convert.ToBoolean(RowCurrent["anulada"]) == true) 
+            {
+                PictDocumentStatus.Visible = true;
+            }
+            else 
+            {
+                PictDocumentStatus.Visible = false;
+            }
+            
         }
-        private void DOCUMENTO_CERRADO()
+        private void ACTIONS_ENABLED() 
         {
-            bot_modificar.Enabled = false;
-            Bot_procesar.Enabled = false;
-            Bot_Anular.Enabled = false;
-            BOT_EXCEL_EXPORT.Enabled = false;
+            Action_UpdateDocument.Enabled = true;
+            Action_LabelProducts.Enabled = true;
+            Action_AutorizeDocument.Enabled = true;
+            Action_CloseDocument.Enabled = true;
+            BOT_IMPRIMIR.Enabled = true;
         }
-        private void DOCUMENTO_ABIERTO()
+        private void NO_ACTIONS() 
         {
-            bot_modificar.Enabled = true;
-            Bot_procesar.Enabled = true;
-            Bot_Anular.Enabled = true;
-            BOT_EXCEL_EXPORT.Enabled = true;
+            Action_UpdateDocument.Enabled = false;
+            Action_LabelProducts.Enabled = false;
+            Action_AutorizeDocument.Enabled = false;
+            Action_CloseDocument.Enabled = false;
         }
         private void FUNCTION_GENERATE_ROLL_DETAILS()
         {
@@ -533,7 +664,13 @@ namespace RitramaAPP
 
             }
         }
-        private Orden CrearObjectOrden()
+        private void LoadTipoMov() 
+        {
+            DataRowView rowcurrent = (DataRowView)bs.Current;
+            rollid1_tipomov = rowcurrent["tipo_mov1"].ToString();
+            rollid2_tipomov = rowcurrent["tipo_mov2"].ToString();
+        }
+        private Orden CrearObjectOrden(int state)
         {
             orden = new Orden
             {
@@ -566,8 +703,12 @@ namespace RitramaAPP
                 Master_lenght2_Real = Convert.ToDouble(txt_pies_real2.Text),
                 Cortes_Largo2 = Convert.ToInt16(txt_cort_largo2.Text),
                 Cantidad_Rollos2 = Convert.ToInt16(txt_cort_rollos_cortar2.Text),
+                Tipo_Mov1 = rollid1_tipomov,
+                Tipo_Mov2 = rollid2_tipomov,
+                STATE = state,
+                LastUpdate = DateTime.Now,
                 Anulada = false,
-                Procesado = false
+                Procesado = false,
             };
             orden.rollos = new List<Roll_Details>();
             orden.Cortes = new List<Corte>();
@@ -587,7 +728,7 @@ namespace RitramaAPP
                     Roll_id = grid_rollos.Rows[fila].Cells[8].Value.ToString(),
                     Code_Person = grid_rollos.Rows[fila].Cells[9].Value.ToString(),
                     Status = grid_rollos.Rows[fila].Cells[10].Value.ToString(),
-                    Disponible = true
+                    Disponible = false
                 };
                 orden.rollos.Add(rollo_cortado);
                 //Agregar los cortes.
@@ -667,10 +808,27 @@ namespace RitramaAPP
         #region FORM_CONTROLS
         private void BOT_EXCEL_EXPORT_Click(object sender, EventArgs e)
         {
+            
+        }
+        private void LABELS_PRODUCTS()
+        {
+            //Procedimiento para generar txt para integrar con Bartender.
+            GENERATE_TXT_FILE();
+            // Actualizar el estado del documento.
+            string numeroOC = txt_numero_oc.Text;
+            int estado = 3;
+            DateTime LastUpdate = DateTime.Now;
+            managerorden.UpdateStateDocumentOC(numeroOC, estado, LastUpdate);
+
+        }
+
+
+        private void GENERATE_TXT_FILE() 
+        {
             string separator = ",";
 
-            using (StreamWriter sr = 
-                new StreamWriter(System.Windows.Forms.Application.StartupPath + 
+            using (StreamWriter sr =
+                new StreamWriter(System.Windows.Forms.Application.StartupPath +
                 R.PATH_FILES.FILE_TXT_DATA_ETIQUETA))
             {
                 foreach (DataGridViewRow row in grid_rollos.Rows)
@@ -692,19 +850,21 @@ namespace RitramaAPP
                 MessageBox.Show("se genero la data de etiquetado...");
             }
         }
+
         private void BOT_BUSCAR_Click(object sender, EventArgs e)
         {
             using (FrmBuscarOrdenes fBuscarOrden = new FrmBuscarOrdenes
             {
-                dtordenes = ds.Tables["dtordenes"]
+                Dtordenes = ds.Tables["dtordenes"]
             })
             {
                 fBuscarOrden.ShowDialog();
-                int itemFound = bs.Find("numero", fBuscarOrden.orden);
+                int itemFound = bs.Find("numero", fBuscarOrden.Orden);
                 bs.Position = itemFound;
             }
             ContadorRegistros();
             VERIFICAR_DOCUMENTO();
+            RefrescarStepIndicator();
         }
         private void Bot_buscar_rollid1_Click(object sender, EventArgs e)
         {
@@ -717,10 +877,26 @@ namespace RitramaAPP
         }
         private void BOT_NUEVO_Click(object sender, EventArgs e)
         {
-            chk_process.DataBindings.Clear();
+            CREATE_NEW_DOCUMENT();
+        }
+        private void CREATE_NEW_DOCUMENT() 
+        {
+            //chk_process.DataBindings.Clear();
             chk_anulado.DataBindings.Clear();
             ParentRow = (DataRowView)bs.AddNew();
             ParentRow.BeginEdit();
+            //Inicializa los campos
+            SetValueInitial();
+            ParentRow.EndEdit();
+            txt_numero_oc.Focus();
+            ContadorRegistros();
+            OptionsMenu(0);
+            OptionsForm(0);
+            ConfigurarCortes();
+            EditMode = 1;
+        }
+        private void SetValueInitial() 
+        {
             ParentRow["numero"] = "0";
             ParentRow["width_1"] = "0";
             ParentRow["lenght_1"] = "0";
@@ -758,20 +934,13 @@ namespace RitramaAPP
             txt_pies_real2.Text = "0";
             txt_width2_r.Text = "0";
             txt_lenght2_r.Text = "0";
-            ParentRow.EndEdit();
-            txt_numero_oc.Focus();
-            ContadorRegistros();
-            OptionsMenu(0);
-            OptionsForm(0);
-            ConfigurarCortes();
-            EditMode = 1;
         }
         private void Button1_Click(object sender, EventArgs e)
         {
             CustomerManager custom = new CustomerManager();
             using (SeleccionCustomers miformc = new SeleccionCustomers
             {
-                dtcustomer = custom.GetCustomersTableOnly()
+                Dtcustomer = custom.GetCustomersTableOnly()
             })
             {
                 miformc.ShowDialog();
@@ -818,7 +987,7 @@ namespace RitramaAPP
         }
         private void Txt_numero_oc_Validating(object sender, CancelEventArgs e)
         {
-            if (managerorden.OrderExiste(txt_numero_oc.Text) && EditMode == 1)
+            if (managerorden.OrderExiste(Convert.ToInt16(txt_numero_oc.Text)) && EditMode == 1)
             {
                 MessageBox.Show("La Orden produccion : " + txt_numero_oc.Text + " ya existe.");
                 txt_numero_oc.Text = "";
@@ -833,28 +1002,50 @@ namespace RitramaAPP
         }
         private void Bot_siguiente_Click(object sender, EventArgs e)
         {
+            ActionPriorRecord();
+        }
+        
+        private void Bot_anterior_Click(object sender, EventArgs e)
+        {
+            ActionNextRecord();
+        }
+        private void Bot_primero_Click(object sender, EventArgs e)
+        {
+            ActionLastRecord();
+        }
+        private void Bot_ultimo_Click(object sender, EventArgs e)
+        {
+            ActionFirstRecord();
+        }
+        private void ActionNextRecord()
+        {
             bs.Position += 1;
             ContadorRegistros();
             VERIFICAR_DOCUMENTO();
+            Update_StepIndicator(Convert.ToInt16(TXT_STEP_DOCUMENT.Text));
         }
-        private void Bot_anterior_Click(object sender, EventArgs e)
+        private void ActionPriorRecord()
         {
             bs.Position -= 1;
             ContadorRegistros();
             VERIFICAR_DOCUMENTO();
+            Update_StepIndicator(Convert.ToInt16(TXT_STEP_DOCUMENT.Text));
         }
-        private void Bot_primero_Click(object sender, EventArgs e)
+        private void ActionFirstRecord()
         {
             bs.Position = 0;
             ContadorRegistros();
             VERIFICAR_DOCUMENTO();
+            Update_StepIndicator(Convert.ToInt16(TXT_STEP_DOCUMENT.Text));
         }
-        private void Bot_ultimo_Click(object sender, EventArgs e)
+        private void ActionLastRecord()
         {
             bs.Position = bs.Count - 1;
             ContadorRegistros();
             VERIFICAR_DOCUMENTO();
+            Update_StepIndicator(Convert.ToInt16(TXT_STEP_DOCUMENT.Text));
         }
+
         private void OptionsForm(int state)
         {
             switch (state)
@@ -869,6 +1060,8 @@ namespace RitramaAPP
                     bot_buscar_rollid1.Enabled = true;
                     bot_buscar_rollid2.Enabled = true;
                     bot_generar_rollos_cortados.Enabled = true;
+                    bot_add_cortes.Enabled = true;
+                    bot_delete_cortes.Enabled = true;
                     break;
                 case 1:
                     // modo cerra forms despues de agregar orden colocar en lectura.
@@ -885,6 +1078,8 @@ namespace RitramaAPP
                     bot_buscar_rollid2.Enabled = false;
                     bot_generar_rollos_cortados.Enabled = false;
                     grid_rollos.ReadOnly = true;
+                    bot_add_cortes.Enabled = false;
+                    bot_delete_cortes.Enabled = false;
                     break;
                 case 2:
                     txt_fecha_orden.Enabled = true;
@@ -898,9 +1093,6 @@ namespace RitramaAPP
                     bot_buscar_rollid1.Enabled = true;
                     bot_buscar_rollid2.Enabled = true;
                     bot_generar_rollos_cortados.Enabled = true;
-                    Bot_procesar.Enabled = false;
-                    Bot_Anular.Enabled = false;
-                    btn_eliminar_renglon.Enabled = true;
                     grid_rollos.ReadOnly = false;
                     grid_rollos.Columns[0].ReadOnly = true;
                     grid_rollos.Columns[1].ReadOnly = true;
@@ -908,8 +1100,6 @@ namespace RitramaAPP
                     grid_rollos.Columns[3].ReadOnly = true;
                     grid_rollos.Columns[6].ReadOnly = true;
                     grid_rollos.Columns[8].ReadOnly = true;
-
-
                     break;
             }
         }
@@ -922,26 +1112,21 @@ namespace RitramaAPP
                     bot_primero.Enabled = false;
                     bot_siguiente.Enabled = false;
                     bot_anterior.Enabled = false;
-                    bot_ultimo.Enabled = false;
-                    BOT_NUEVO.Enabled = false;
+                    bot_LastRecord.Enabled = false;
                     BOT_BUSCAR.Enabled = false;
-                    BOT_EXCEL_EXPORT.Enabled = false;
                     BOT_CANCELAR.Enabled = true;
                     BOT_SAVE.Enabled = true;
-                    bot_modificar.Enabled = false;
                     break;
                 case 1:
                     //modo agregar despues de grabar.
                     bot_primero.Enabled = true;
                     bot_siguiente.Enabled = true;
                     bot_anterior.Enabled = true;
-                    bot_ultimo.Enabled = true;
-                    BOT_NUEVO.Enabled = true;
+                    bot_LastRecord.Enabled = true;
                     BOT_CANCELAR.Enabled = false;
                     BOT_BUSCAR.Enabled = true;
-                    BOT_EXCEL_EXPORT.Enabled = true;
                     BOT_SAVE.Enabled = false;
-                    bot_modificar.Enabled = true;
+                    Menu_Actions.Enabled = true;
                     break;
             }
         }
@@ -961,13 +1146,17 @@ namespace RitramaAPP
         }
         private void Bot_procesar_Click(object sender, EventArgs e)
         {
+           
+        }
+        private void ProcesarDocumento() 
+        {
             DialogResult dr = MessageBox.Show("Esta seguro de procesar este documento (S/N)?",
-                 "Advertencia", MessageBoxButtons.YesNo);
+                    "Advertencia", MessageBoxButtons.YesNo);
             switch (dr)
             {
                 case DialogResult.Yes:
                     managerorden.ProcesarOrden(txt_numero_oc.Text.Trim());
-                    chk_process.Checked = true;
+                    //chk_process.Checked = true;
                     VERIFICAR_DOCUMENTO();
                     break;
                 case DialogResult.No:
@@ -975,6 +1164,10 @@ namespace RitramaAPP
             }
         }
         private void Bot_Anular_Click(object sender, EventArgs e)
+        {
+        
+        }
+        private void AnularDocumento() 
         {
             DialogResult dr = MessageBox.Show("Esta seguro de Anular este documento (S/N)?",
                 "Advertencia", MessageBoxButtons.YesNo);
@@ -1056,15 +1249,14 @@ namespace RitramaAPP
                 ChildRows.EndEdit();
             }
             bs.EndEdit();
-            if (EditMode == 1)
-            {
-                bs.Position = bs.Count - 1;
-                bot_generar_rollos_cortados.Enabled = false;
-            }
-            //ischanged_rollos = true;
             grid_rollos.Rows[0].Selected = true;
+            bot_generar_rollos_cortados.Enabled = false;
         }
         private void Bot_modificar_Click(object sender, EventArgs e)
+        {
+        
+        }
+        private void UPDATE_DOCUMENT() 
         {
             EditMode = 2;
             modproduct_id = txt_product_id.Text;
@@ -1119,10 +1311,17 @@ namespace RitramaAPP
         private void CALCULAR_MATERIAL_RESTANTE()
         {
             //Calculo de material restante
-            txt_width1_r.Text = (Convert.ToDouble(txt_width1_rollid.Text)
-            - Convert.ToDouble(txt_width_u.Text)).ToString();
-            txt_lenght1_r.Text = (Convert.ToDouble(txt_pies_real.Text)
-            - Convert.ToDouble(txt_lenght_u.Text)).ToString();
+            decimal w1 = Convert.ToDecimal(txt_width1_rollid.Text);
+            decimal w2 = Convert.ToDecimal(txt_width_u.Text);
+            decimal result = Math.Round((w1 - w2), 2, MidpointRounding.AwayFromZero);
+            txt_width1_r.Text = result.ToString();
+
+            
+            txt_lenght1_r.Text = Math.Round(Convert.ToDouble(txt_pies_real.Text)
+            - Convert.ToDouble(txt_lenght_u.Text),2,MidpointRounding.AwayFromZero).ToString();
+
+
+
             if (Convert.ToDouble(txt_width1_r.Text) == 0)
             {
                 txt_width1_r.Text = txt_width1_rollid.Text;
@@ -1231,10 +1430,9 @@ namespace RitramaAPP
             {
                 grid_cortes.Rows[i].Cells["lenght"].Value = txt_cort_long_cortar.Text;
                 grid_cortes.Rows[i].Cells["msi"].Value =
-               Convert.ToDouble(grid_cortes.Rows[i].Cells["width"].Value) *
-               Convert.ToDouble(grid_cortes.Rows[i].Cells["lenght"].Value)
-               * R.CONSTANTES.FACTOR_CALCULO_MSI;
-                //CALCULAR_CORTES_ANCHOS();
+                Convert.ToDouble(grid_cortes.Rows[i].Cells["width"].Value) *
+                Convert.ToDouble(grid_cortes.Rows[i].Cells["lenght"].Value)
+                * R.CONSTANTES.FACTOR_CALCULO_MSI;
             }
         }
         private void Txt_pies_malos2_KeyUp(object sender, KeyEventArgs e)
@@ -1260,27 +1458,6 @@ namespace RitramaAPP
             CALCULAR_MATERIAL_RESTANTE2();
             txt_width_u2.Text = txt_cort_total_ancho.Text;
         }
-
-        private void Txt_cort_rollos_cortar_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Txt_width2_r_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Txt_cort_largo2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Grid_cortes_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
         private void Txt_cort_largo_KeyPress(object sender, KeyPressEventArgs e)
         {
             string CaracValid = "0123456789";
@@ -1317,6 +1494,104 @@ namespace RitramaAPP
                 e.Handled = true;
             }
         }
+
+        private void Action_NewDocument_Click(object sender, EventArgs e)
+        {
+            CREATE_NEW_DOCUMENT();
+            Menu_Actions.Enabled = false;
+            bot_generar_rollos_cortados.Enabled = true;
+            Update_StepIndicator(0);
+        }
+
+        private void Action_UpdateDocument_Click(object sender, EventArgs e)
+        {
+            UPDATE_DOCUMENT();
+            Menu_Actions.Enabled = false;
+            Update_StepIndicator(1);
+        }
+        private void Action_LabelProducts_Click(object sender, EventArgs e)
+        {
+            LABELS_PRODUCTS();
+            RefreshInterfazBS(3);
+        }
+        private void RefreshInterfazBS(int step) 
+        {
+            //Refrescar la Interfaz Grafica.
+            DataRowView rowcurrent;
+            rowcurrent = (DataRowView)bs.Current;
+            rowcurrent["step"] = step;
+            bs.EndEdit();
+            RefrescarStepIndicator();
+        }
+
+        private void Action_AutorizeDocument_Click(object sender, EventArgs e)
+        {
+            FrmSaveOc Aprodoc = new FrmSaveOc
+            {
+                NumeroOC = txt_numero_oc.Text
+            };
+            Aprodoc.ShowDialog();
+            RefreshInterfazBS(4);
+        }
+
+        private void Action_CloseDocument_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show("Esta seguro de Cerrar la orden de Corte (S/N)", "Advertencia", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+
+                string numoc = txt_numero_oc.Text;
+                int state = 5;
+                DateTime LastUpdate = DateTime.Now;
+                managerorden.UpdateStateDocumentOC(numoc,state,LastUpdate);
+                RefreshInterfazBS(5);
+                RefrescarStepIndicator();
+                // ESTABLECER LA DISPONIBILIDAD DE LOS ROLLOS
+                managerorden.UpdateDispoRollsDocumentOC(numoc, true);
+                // CARGA EL ORGIEN DEL ARCHIVO DE INICIALES / ARCHIVO DE RECEPCIONES
+                LoadTipoMov();
+                //MOMENTO EN EL QUE SE AFECTA INVENTARÍO.
+                RUN_INVENTARIO();
+                //ACTUALIZAR DOCUMENTO
+                VERIFICAR_DOCUMENTO();
+            }
+        }
+
+        private void Accion_AnularDocument_Click(object sender, EventArgs e)
+        {
+            DataRowView RowCurrent = (DataRowView)bs.Current;
+            Boolean sw = Convert.ToBoolean(RowCurrent["anulada"]);
+            int step = Convert.ToInt16(RowCurrent["step"]); 
+            if (sw) 
+            {
+                MessageBox.Show("Ya este documnento esta anulado...");
+                return;
+            }
+            if (step == 5) 
+            {
+                MessageBox.Show("Orden Cerrada, no se puede anular");
+                return;
+            }
+            DialogResult dialogResult = MessageBox.Show("Esta seguro de Anular esta Orden de Corte (S/N)", "Advertencia", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                string numeroOc = txt_numero_oc.Text;
+                if (step >= 1 || step <= 4) 
+                {
+                    managerorden.AnularOrden(numeroOc);
+                    RowCurrent["anulada"] = true;
+                    bs.EndEdit();
+                    VERIFICAR_DOCUMENTO();
+                }
+            }
+            
+        }
+
+        private void Bot_LastRecord_Click(object sender, EventArgs e)
+        {
+            ActionFirstRecord();
+        }
+
         private void Txt_pies_malos2_KeyPress(object sender, KeyPressEventArgs e)
         {
             string CaracValid = "0123456789";
@@ -1325,6 +1600,11 @@ namespace RitramaAPP
                 // si no es bakcspace y no es un numero se omite.   
                 e.Handled = true;
             }
+        }
+
+        private void ToolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
         }
 
         private void BOT_IMPRIMIR_Click(object sender, EventArgs e)
@@ -1340,7 +1620,7 @@ namespace RitramaAPP
                 CrTables = reporte.Database.Tables;
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_RITRAMA,
+                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster
@@ -1352,10 +1632,10 @@ namespace RitramaAPP
                     table.ApplyLogOnInfo(crtablelogoninfo);
                 }
                 frmReportView.crystalReportViewer1.ReportSource = reporte;
-                frmReportView.crystalReportViewer1.Zoom(100);
+                frmReportView.crystalReportViewer1.Zoom(150);
                 frmReportView.Text = "Reporte de la Orden de Corte";
-                frmReportView.Width = 900;
-                frmReportView.Height = 700;
+                frmReportView.Width = 1000;
+                frmReportView.Height = 800;
                 frmReportView.ShowDialog();
             }
         }
