@@ -89,8 +89,8 @@ namespace RitramaAPP
             supply.Supply_Phone = txt_telefono_supply.Text;
             supply.Supply_Email = txt_email_supply.Text;
             supply.Anulado = CHK_ANULADO.Checked;
-            supply.unid_master_1 = RAD_UNID1.Checked;
-            supply.unid_master_2 = RAD_UNID2.Checked;
+            supply.Unid_master_1 = RAD_UNID1.Checked;
+            supply.Unid_master_2 = RAD_UNID2.Checked;
             SupplyManager supplyManager = new SupplyManager();
             supplyManager.Update(supply);
             OpcionesMenu(0);
@@ -108,8 +108,8 @@ namespace RitramaAPP
             supply.Supply_Direcc = txt_direccion_supply.Text;
             supply.Supply_Phone = txt_telefono_supply.Text;
             supply.Supply_Email = txt_email_supply.Text;
-            supply.unid_master_1 = RAD_UNID1.Checked;
-            supply.unid_master_2 = RAD_UNID2.Checked;
+            supply.Unid_master_1 = RAD_UNID1.Checked;
+            supply.Unid_master_2 = RAD_UNID2.Checked;
             supply.Anulado = false;
             // Validar la entidad Producto.
             if (supply.Supply_ID == string.Empty)
@@ -122,7 +122,7 @@ namespace RitramaAPP
                 MessageBox.Show("Introduzca el nombre del proveedor.");
                 return;
             }
-            if (supply.unid_master_1 == false && supply.unid_master_2 == false)
+            if (supply.Unid_master_1 == false && supply.Unid_master_2 == false)
             {
                 MessageBox.Show("Introducir la unidad en la recepcion de master...");
                 return;

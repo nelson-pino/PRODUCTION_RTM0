@@ -1615,12 +1615,12 @@ namespace RitramaAPP
                 TableLogOnInfos crtablelogoninfos = new TableLogOnInfos();
                 TableLogOnInfo crtablelogoninfo = new TableLogOnInfo();
                 reporte.Load(System.Windows.Forms.Application.StartupPath + R.PATH_FILES.PATH_DATA_REPORT_ORDEN_CORTE);
-                reporte.SetParameterValue("number_oc", txt_numero_oc.Text.Trim());
+                //reporte.SetParameterValue("number_oc", txt_numero_oc.Text.Trim());
                 Tables CrTables;
                 CrTables = reporte.Database.Tables;
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster

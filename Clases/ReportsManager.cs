@@ -27,7 +27,7 @@
                 CrTables = reporte.Database.Tables;
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster
@@ -62,7 +62,7 @@
                 CrTables = reporte.Database.Tables;
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster
@@ -96,7 +96,7 @@
                 CrTables = reporte.Database.Tables;
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster
@@ -134,7 +134,7 @@
 
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster
@@ -166,7 +166,7 @@
                 reporte.SetParameterValue("NUMERO", despacho);
                 ConnectionInfo ConexInfo = new ConnectionInfo
                 {
-                    ServerName = R.SERVERS.SERVER_ETIQUETAS,
+                    ServerName = R.SERVERS.SERVER_RITRAMA,
                     DatabaseName = R.DATABASES.RITRAMA,
                     UserID = R.USERS.UserMaster,
                     Password = R.USERS.KeyMaster

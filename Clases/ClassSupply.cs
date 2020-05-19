@@ -10,7 +10,7 @@ namespace RitramaAPP
         public string Supply_Phone { get; set; }
         public string Supply_Email { get; set; }
         public Boolean Anulado { get; set; }
-        public Boolean unid_master_1 { get; set; }
-        public Boolean unid_master_2 { get; set; }
+        public bool Unid_master_1 { get; set; }
+        public Boolean Unid_master_2 { get; set; }
     }
 }

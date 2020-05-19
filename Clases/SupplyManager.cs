@@ -119,8 +119,8 @@ namespace RitramaAPP.Clases
                 new SqlParameter() {ParameterName = "@p4", SqlDbType = SqlDbType.NVarChar, Value = datos.Supply_Phone},
                 new SqlParameter() {ParameterName = "@p5", SqlDbType = SqlDbType.NVarChar, Value = datos.Supply_Email},
                 new SqlParameter() {ParameterName = "@p6", SqlDbType = SqlDbType.Bit, Value = datos.Anulado},
-                new SqlParameter() {ParameterName = "@p7", SqlDbType = SqlDbType.Bit, Value = datos.unid_master_1},
-                new SqlParameter() {ParameterName = "@p8", SqlDbType = SqlDbType.Bit, Value = datos.unid_master_2}
+                new SqlParameter() {ParameterName = "@p7", SqlDbType = SqlDbType.Bit, Value = datos.Unid_master_1},
+                new SqlParameter() {ParameterName = "@p8", SqlDbType = SqlDbType.Bit, Value = datos.Unid_master_2}
             };
             return sp;
         }

@@ -123,7 +123,7 @@ namespace RitramaAPP
         private void Main_Load(object sender, System.EventArgs e)
         {
             string ver = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            LABEL_VERSION.Text = "Versión App: " + ver;
+            LABEL_VERSION.Text = "PRODUCCION: " + ver;
         }
 
     
